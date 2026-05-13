@@ -61,7 +61,7 @@ const Header = () => {
               <Mail size={12} className="shrink-0" /> <span className="hidden sm:inline">info@remoteschedulers.com</span><span className="sm:hidden">Email</span>
             </a>
             <span className="flex items-center gap-2 border-l border-navy/10 pl-4 md:pl-8">
-              <Phone size={12} className="shrink-0" /> <span className="hidden sm:inline">+1 (888) 555-0123</span><span className="sm:hidden">Call</span>
+              <Phone size={12} className="shrink-0" /> <span className="hidden sm:inline">512-806-7414</span><span className="sm:hidden">Call</span>
             </span>
           </div>
           
@@ -197,8 +197,8 @@ const Header = () => {
                       <a href="mailto:info@remoteschedulers.com" className="text-white-off/60 text-sm font-medium flex items-center gap-3">
                         <Mail size={16} className="text-gold" /> info@remoteschedulers.com
                       </a>
-                      <a href="tel:+18885550123" className="text-white-off/60 text-sm font-medium flex items-center gap-3">
-                        <Phone size={16} className="text-gold" /> +1 (888) 555-0123
+                      <a href="tel:5128067414" className="text-white-off/60 text-sm font-medium flex items-center gap-3">
+                        <Phone size={16} className="text-gold" /> 512-806-7414
                       </a>
                     </div>
                   </div>
@@ -843,7 +843,7 @@ const Footer = () => {
                 <Mail size={14} className="text-gold/50 shrink-0" /> info@remoteschedulers.com
               </a>
               <div className="flex items-center gap-3 border-l border-gold/20 pl-4">
-                <Phone size={14} className="text-gold/50 shrink-0" /> +1 (888) 555-0123
+                <Phone size={14} className="text-gold/50 shrink-0" /> 512-806-7414
               </div>
               <p className="text-[9px] opacity-40 font-medium italic mt-4 tracking-normal normal-case">Operational Support available Mon-Fri, 9AM - 6PM EST</p>
             </div>
