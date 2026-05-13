@@ -1,0 +1,58 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@300;400;500;600;700&family=Barlow+Condensed:wght@700;800&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Barlow", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Bebas Neue", cursive;
+  --font-condensed: "Barlow Condensed", sans-serif;
+
+  --color-gold: #C9A84C;
+  --color-gold-light: #E8C96B;
+  --color-navy: #0D1B2A;
+  --color-navy-light: #162a3f;
+  --color-white-off: #F5F2ED;
+  --color-gray-soft: #6B6B6B;
+  
+  --breakpoint-xs: 480px;
+
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-shimmer: shimmer 2.5s linear infinite;
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+  @keyframes shimmer {
+    from { transform: translateX(-100%); }
+    to { transform: translateX(100%); }
+  }
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    @apply antialiased;
+    overflow-x: hidden;
+  }
+  body {
+    @apply bg-white-off text-navy font-sans selection:bg-gold selection:text-navy;
+    overflow-x: hidden;
+    width: 100%;
+  }
+}
+
+@layer components {
+  .glass-nav {
+    @apply bg-white-off/80 backdrop-blur-xl border-b border-gold/10;
+  }
+  .card-hover {
+    @apply transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl hover:shadow-navy/5;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+}
