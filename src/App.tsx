@@ -27,7 +27,7 @@ import { ChatBot } from './components/ChatBot';
 
 // --- Sub-components ---
 
-const Header = () => {
+const Header = ({ onOpenQuote }: { onOpenQuote: () => void }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { scrollYProgress } = useScroll();
@@ -46,7 +46,6 @@ const Header = () => {
   const navLinks = [
     { name: 'Services', href: '#services' },
     { name: 'Process', href: '#process' },
-    { name: 'Payments', href: '#payments' },
     { name: 'Why Us', href: '#why' },
     { name: 'Reviews', href: '#testimonials' },
   ];
@@ -60,19 +59,16 @@ const Header = () => {
             <a href="mailto:info@remoteschedulers.com" className="hover:opacity-70 transition-all flex items-center gap-2">
               <Mail size={12} className="shrink-0" /> <span className="hidden sm:inline">info@remoteschedulers.com</span><span className="sm:hidden">Email</span>
             </a>
-            <span className="flex items-center gap-2 border-l border-navy/10 pl-4 md:pl-8">
-              <Phone size={12} className="shrink-0" /> <span className="hidden sm:inline">512-806-7414</span><span className="sm:hidden">Call</span>
-            </span>
           </div>
           
           <div className="order-1 md:order-2">
-            <span className="bg-navy text-gold px-4 py-1 text-[9px] md:text-[10px] animate-pulse rounded-full shadow-lg whitespace-nowrap">
-              30% Discount for First 20 GCs
+            <span className="bg-navy text-gold px-4 py-1 text-[9px] md:text-[10px] rounded-full shadow-lg whitespace-nowrap">
+              Now accepting new CPM Baseline engagements for Q3/Q4.
             </span>
           </div>
           
-          <div className="hidden lg:block order-3 text-[9px] opacity-40">
-            Precision Planning Group
+          <div className="hidden lg:block order-3 text-[9px] opacity-40 uppercase tracking-widest">
+            Project Controls Excellence
           </div>
         </div>
       </div>
@@ -94,7 +90,7 @@ const Header = () => {
               Remote <span className="text-gold group-hover:text-navy">Schedulers</span>
             </span>
             <span className="text-[9px] sm:text-[10px] font-semibold tracking-[0.25em] text-gray-soft uppercase mt-1">
-              We Plan. You Build.
+              Project Controls & Scheduling Expert
             </span>
           </div>
 
@@ -110,12 +106,12 @@ const Header = () => {
                 <span className="absolute -bottom-1 left-0 w-0 h-px bg-gold transition-all group-hover:w-full"></span>
               </a>
             ))}
-            <a 
-              href="#cta"
+            <button 
+              onClick={onOpenQuote}
               className="bg-navy text-gold hover:bg-gold hover:text-navy px-8 py-3 text-[11px] font-bold tracking-widest uppercase transition-all transform hover:-translate-y-1 shadow-lg shadow-navy/10 active:scale-95"
             >
               Get a Quote
-            </a>
+            </button>
           </div>
 
           {/* Mobile Toggle */}
@@ -180,25 +176,24 @@ const Header = () => {
                 </div>
 
                 <div className="mt-auto pt-10 border-t border-white-off/10 space-y-8">
-                  <motion.a 
+                  <motion.button 
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.4 }}
-                    href="#cta"
+                    onClick={() => {
+                      setIsMobileMenuOpen(false);
+                      onOpenQuote();
+                    }}
                     className="bg-gold text-navy w-full text-center py-5 text-xl font-bold tracking-[0.2em] uppercase rounded-sm shadow-xl block"
-                    onClick={() => setIsMobileMenuOpen(false)}
                   >
                     Get a Quote
-                  </motion.a>
+                  </motion.button>
 
                   <div className="space-y-4">
                     <p className="text-gold text-[10px] font-bold tracking-[0.3em] uppercase">Quick Contact</p>
                     <div className="flex flex-col space-y-4">
                       <a href="mailto:info@remoteschedulers.com" className="text-white-off/60 text-sm font-medium flex items-center gap-3">
                         <Mail size={16} className="text-gold" /> info@remoteschedulers.com
-                      </a>
-                      <a href="tel:5128067414" className="text-white-off/60 text-sm font-medium flex items-center gap-3">
-                        <Phone size={16} className="text-gold" /> 512-806-7414
                       </a>
                     </div>
                   </div>
@@ -212,9 +207,9 @@ const Header = () => {
   );
 };
 
-const Hero = () => {
+const Hero = ({ onOpenQuote }: { onOpenQuote: () => void }) => {
   return (
-    <section className="relative min-h-[90vh] md:min-h-screen flex items-center md:items-end pt-32 md:pt-24 overflow-hidden bg-navy">
+    <section className="relative min-h-[90vh] md:min-h-screen flex items-center md:items-end pt-40 md:pt-24 overflow-hidden bg-navy">
       {/* Background with Overlays */}
       <div className="absolute inset-0 z-0">
         <motion.img 
@@ -237,10 +232,10 @@ const Hero = () => {
             transition={{ duration: 0.8, delay: 0.2 }}
           >
             <span className="inline-flex items-center gap-3 border border-gold/50 text-gold px-3 sm:px-4 py-2 text-[9px] sm:text-[10px] font-bold tracking-[0.4em] uppercase mb-6 sm:mb-8 backdrop-blur-sm">
-              <Zap size={12} fill="currentColor" /> CPM Scheduling Experts
+              <Zap size={12} fill="currentColor" /> Scheduling Expert
             </span>
-            <h1 className="font-display text-7xl sm:text-8xl md:text-[10rem] leading-[0.85] md:leading-[0.82] text-white-off tracking-tight mb-8">
-              WE PLAN.<br /><span className="text-gold selection:text-white-off">YOU BUILD.</span>
+            <h1 className="font-display text-7xl sm:text-8xl md:text-[9rem] xl:text-[10rem] leading-[0.85] md:leading-[0.82] text-white-off tracking-tight mb-8 uppercase">
+              We Plan.<br /><span className="text-gold selection:text-white-off">You Build.</span>
             </h1>
           </motion.div>
           
@@ -248,10 +243,10 @@ const Hero = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.6 }}
-            className="text-lg sm:text-xl text-white-off/70 max-w-xl mb-10 sm:mb-12 leading-relaxed font-light font-sans px-1 sm:px-0"
+            className="text-lg sm:text-xl text-white-off/70 max-w-2xl mb-10 sm:mb-12 leading-relaxed font-light font-sans px-1 sm:px-0"
           >
-            Delivering professional CPM schedules within 5–7 business days. 
-            Navigate your build with absolute precision and data-driven planning.
+            Expert Primavera P6 and CPM scheduling services for contractors. 
+            We build clear, professional schedules that help you finish your project on time and on budget.
           </motion.p>
           
           <motion.div 
@@ -260,14 +255,14 @@ const Hero = () => {
             transition={{ duration: 0.8, delay: 0.8 }}
             className="flex flex-col sm:flex-row flex-wrap gap-4 sm:gap-5"
           >
-            <a 
-              href="#cta"
+            <button 
+              onClick={onOpenQuote}
               className="group relative bg-gold hover:bg-gold-light text-navy px-10 sm:px-12 py-5 text-xs font-bold tracking-[0.2em] uppercase flex items-center justify-center sm:justify-start gap-3 overflow-hidden shadow-2xl shadow-gold/20 active:scale-95 transition-all"
             >
               <span className="relative z-10">Get a Quote</span>
               <ChevronRight size={18} className="relative z-10 transition-transform group-hover:translate-x-1" />
               <div className="absolute inset-0 bg-white/20 -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out"></div>
-            </a>
+            </button>
           </motion.div>
         </div>
       </div>
@@ -307,10 +302,10 @@ const Hero = () => {
 
 const Stats = () => {
   const stats = [
-    { value: '500+', label: 'Projects Worldwide' },
-    { value: '5-7', label: 'Day Delivery' },
-    { value: '98%', label: 'Client Satisfaction' },
-    { value: '5+', label: 'Years Experience' },
+    { value: '100+', label: 'in ME & Gulf' },
+    { value: '5-7', label: 'Day Turnaround' },
+    { value: 'P6', label: 'Experience' },
+    { value: '90%', label: 'Baseline Approval' },
   ];
 
   return (
@@ -337,17 +332,17 @@ const Stats = () => {
 
 const Services = () => {
   const services = [
-    { id: '01', title: 'CPM Scheduling', icon: <Calendar size={28} />, desc: 'Full Critical Path Method schedules tailored to your scope, built in Primavera P6 or MS Project.' },
-    { id: '02', title: 'Cost & Resource Loading', icon: <BarChart3 size={28} />, desc: 'Advanced integration of budget and resource allocation within your schedule for absolute control.' },
-    { id: '03', title: 'Schedule Updates', icon: <TrendingUp size={28} />, desc: 'Regular maintenance and progress updates to keep your project on track through every phase.' },
-    { id: '04', title: 'Delay Analysis', icon: <AlertTriangle size={28} />, desc: 'Forensic analysis of delays with clear documentation to support claims and protect interests.' },
-    { id: '05', title: 'TIA & Narrative Reports', icon: <Award size={28} />, desc: 'Time Impact Analysis and written reports that document delays and impacts for claims.' },
+    { id: '01', title: 'Schedule Development', icon: <Calendar size={28} />, desc: 'We build detailed project schedules in Primavera P6 or MS Project that meet all your contract requirements.' },
+    { id: '02', title: 'Cost & Resource Loading', icon: <BarChart3 size={28} />, desc: 'We link your budget and labor resources to the schedule so you can track costs and manpower easily.' },
+    { id: '03', title: 'Monthly Progress Updates', icon: <TrendingUp size={28} />, desc: 'We provide monthly updates and reports to show your project progress and alert you to potential delays.' },
+    { id: '04', title: 'Delay & Claims Support', icon: <AlertTriangle size={28} />, desc: 'If your project is delayed, we provide the critical analysis needed to support time extensions and protect your company.' },
+    { id: '05', title: 'Recovery Planning', icon: <Award size={28} />, desc: 'We create realistic recovery plans to help get your project back on schedule after unexpected disruptions.' },
   ];
 
   const comparison = [
     { feature: 'Turnaround Time', remote: '5-7 Days', typical: '14-21 Days' },
-    { feature: 'Pricing Model', remote: 'Fixed per Project (30% Down)', typical: 'Hourly/Variable' },
-    { feature: 'Payment Logic', remote: 'Institutional Grade', typical: 'Manual/Unstructured' },
+    { feature: 'Pricing Model', remote: 'Project-Based', typical: 'Hourly/Variable' },
+    { feature: 'Payment Logic', remote: 'Direct Invoicing', typical: 'Manual/Unstructured' },
     { feature: 'Software Compatibility', remote: 'P6, MS Project', typical: 'P6 Only/MS Project' },
   ];
 
@@ -367,7 +362,7 @@ const Services = () => {
             <h2 className="font-condensed text-4xl sm:text-5xl md:text-7xl font-extrabold text-navy leading-[0.95] uppercase">Powerful<br />Solutions</h2>
           </div>
           <p className="text-gray-soft max-w-sm text-base leading-relaxed border-l-2 border-gold pl-6 py-1">
-            From baseline schedules to forensic delay claims — we provide the technical logic required for elite construction performance.
+            From baseline schedules to critical delay claims — we provide the technical logic required for elite construction performance.
           </p>
         </div>
 
@@ -382,7 +377,7 @@ const Services = () => {
               transition: { staggerChildren: 0.1 }
             }
           }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-gold/15 border border-gold/15 mb-24 sm:mb-32 group"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-gold/15 border border-gold/15 group"
         >
           {services.map((s) => (
             <motion.div 
@@ -405,44 +400,6 @@ const Services = () => {
             </motion.div>
           ))}
         </motion.div>
-
-        {/* Comparison Table */}
-        <motion.div 
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="max-w-4xl mx-auto bg-navy p-6 md:p-20 border-t-[6px] border-gold shadow-3xl relative overflow-hidden"
-        >
-          <div className="absolute -top-10 -right-10 p-4 opacity-[0.03] rotate-12 pointer-events-none">
-            <LayoutGrid size={240} />
-          </div>
-          <div className="text-center mb-10 sm:mb-16 relative z-10">
-            <span className="text-[10px] font-bold tracking-[0.4em] text-gold uppercase mb-4 block">Competitive Edge</span>
-            <h3 className="font-condensed text-3xl sm:text-4xl md:text-5xl font-extrabold text-white-off uppercase tracking-tight">The Remote Advantage</h3>
-          </div>
-          
-          <div className="relative z-10 overflow-x-auto no-scrollbar">
-            <div className="min-w-[450px]">
-              <div className="grid grid-cols-3 text-[10px] font-bold tracking-[0.25em] text-gold/60 uppercase mb-6 sm:mb-8 pb-4 border-b border-white-off/10">
-                <span className="flex items-center gap-2">Core Feature</span>
-                <span className="text-center bg-gold/10 py-1 text-gold">Remote Schedulers</span>
-                <span className="text-right">Other Firms</span>
-              </div>
-              {comparison.map((item) => (
-                <div key={item.feature} className="grid grid-cols-3 items-center py-4 sm:py-6 border-b border-white-off/5 group/row hover:bg-white-off/[0.02] transition-colors -mx-4 px-4">
-                  <span className="text-white-off/70 font-bold text-xs sm:text-sm group-hover/row:text-white-off transition-colors">{item.feature}</span>
-                  <span className="text-center text-gold font-extrabold text-base sm:text-lg font-condensed tracking-wide">{item.remote}</span>
-                  <span className="text-right text-white-off/30 text-xs sm:text-sm font-medium">{item.typical}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-          <div className="mt-12 sm:mt-16 flex items-center justify-center gap-3">
-             <div className="h-px w-6 sm:w-10 bg-gold/30"></div>
-             <p className="text-white-off/20 text-[9px] sm:text-[10px] italic font-medium text-center">Standard baseline comparison verified by industry audit data</p>
-             <div className="h-px w-6 sm:w-10 bg-gold/30"></div>
-          </div>
-        </motion.div>
       </div>
     </section>
   );
@@ -450,10 +407,11 @@ const Services = () => {
 
 const Process = () => {
   const steps = [
-    { num: '01', title: 'Send Your Plans', desc: 'Securely upload drawings, specs, and contract documents through our encrypted client portal.' },
-    { num: '02', title: 'Professional Review', desc: 'Our senior schedulers audit your scope and deliver a comprehensive fixed-price quote within 24 hours.' },
-    { num: '03', title: 'Technical Build', desc: 'Your logic-driven CPM schedule is engineered using industry best practices in P6 or MS Project.' },
-    { num: '04', title: 'Rapid Delivery', desc: 'Receive your submission-ready schedule in 5-7 business days. Guaranteed precision for every project.' },
+    { num: '01', title: 'Submit Plans', desc: 'Securely send us your project drawings and documents for a professional review.' },
+    { num: '02', title: 'Get the quote with discount', desc: 'We review your requirements and provide a fixed-price proposal within 24 hours.' },
+    { num: '03', title: 'Coordination', desc: 'Our coordinator connects our engineers with your PM to gather logic data, NTP, and mobilization dates.' },
+    { num: '04', title: 'Technical Build', desc: 'Our experts build your project schedule, making sure it follows all rules and construction logic.' },
+    { num: '05', title: 'Final Delivery', desc: 'Receive your professional schedule in 5-7 business days. We provide P6 files and clear PDF reports.' },
   ];
 
   return (
@@ -479,9 +437,9 @@ const Process = () => {
           </p>
         </div>
 
-        <div className="relative grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-12 gap-y-16 sm:gap-16">
+        <div className="relative grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-x-8 gap-y-16 sm:gap-12">
           {/* Connecting line for desktop */}
-          <div className="hidden lg:block absolute top-[28px] left-[10%] right-[10%] h-[2px] bg-gradient-to-r from-gold via-navy to-gold opacity-30"></div>
+          <div className="hidden xl:block absolute top-[28px] left-[10%] right-[10%] h-[2px] bg-gradient-to-r from-gold via-navy to-gold opacity-30"></div>
           
           {steps.map((step, i) => (
             <motion.div 
@@ -505,98 +463,6 @@ const Process = () => {
   );
 };
 
-const PaymentInfrastructure = () => {
-  const options = [
-    {
-      title: "Digital Processing",
-      method: "PayPal & Credit Cards",
-      icon: <Wallet size={28} />,
-      desc: "Instant authorization and 30% retainer processing via our secure PayPal gateway. Full buyer protection and digital receipting for corporate records.",
-      features: ["Global Acceptance", "Instant Retainers", "Buyer Protection"]
-    },
-    {
-      title: "Direct Logistics",
-      method: "Bank Transfer & Wire",
-      icon: <Building2 size={28} />,
-      desc: "Standard institutional billing for larger contracts. Specialized ACH and SWIFT instructions provided for seamless treasury management.",
-      features: ["No Processing Fees", "Direct Treasury", "Custom Invoicing"]
-    }
-  ];
-
-  return (
-    <section id="payments" className="py-24 sm:py-32 px-4 sm:px-6 bg-[#050C14] relative overflow-hidden">
-      <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent"></div>
-      
-      <div className="max-w-7xl mx-auto relative z-10">
-        <div className="text-center mb-20">
-          <motion.span 
-            initial={{ opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-[10px] font-bold tracking-[0.4em] text-gold uppercase mb-5 block"
-          >
-            Financial Intelligence
-          </motion.span>
-          <h2 className="font-condensed text-4xl sm:text-6xl md:text-8xl font-extrabold text-white-off uppercase leading-[0.8] tracking-tight">Flexible<br /><span className="text-gold">Settlements</span></h2>
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12">
-          {options.map((opt, i) => (
-            <motion.div 
-              key={opt.method}
-              initial={{ opacity: 0, x: i === 0 ? -30 : 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              className="bg-white-off/[0.03] border border-white-off/10 p-8 sm:p-12 relative group hover:bg-white-off/[0.05] transition-all duration-500 overflow-hidden"
-            >
-              <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:scale-110 group-hover:opacity-20 transition-all duration-700">
-                {opt.icon}
-              </div>
-              
-              <div className="mb-8">
-                 <div className="text-gold font-bold text-sm tracking-widest uppercase mb-2">{opt.title}</div>
-                 <h3 className="text-2xl sm:text-3xl font-extrabold text-white-off font-condensed tracking-wide uppercase">{opt.method}</h3>
-              </div>
-              
-              <p className="text-white-off/40 text-base leading-relaxed mb-10 font-light max-w-md">
-                {opt.desc}
-              </p>
-              
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 border-t border-white-off/5 pt-8">
-                {opt.features.map(feat => (
-                  <div key={feat} className="flex items-center gap-2 text-[10px] font-bold text-gold uppercase tracking-wider">
-                    <CheckCircle2 size={12} className="shrink-0" /> {feat}
-                  </div>
-                ))}
-              </div>
-            </motion.div>
-          ))}
-        </div>
-
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="mt-20 p-8 bg-gold/5 border-l-2 border-gold flex flex-col md:flex-row items-center justify-between gap-8"
-        >
-          <div className="flex items-center gap-6">
-            <div className="w-12 h-12 bg-gold/10 flex items-center justify-center text-gold">
-              <ShieldCheck size={24} />
-            </div>
-            <div>
-              <h4 className="text-white-off font-extrabold text-sm uppercase tracking-widest mb-1">Encrypted Transactions</h4>
-              <p className="text-white-off/30 text-[11px] font-medium uppercase tracking-wider">All logic and financial metadata secured via 256-bit SSL encryption.</p>
-            </div>
-          </div>
-          <a href="#cta" className="text-gold text-[10px] font-bold uppercase tracking-[0.3em] hover:text-white-off transition-colors flex items-center gap-2 group">
-            Review Billing Terms <ChevronRight size={14} className="group-hover:translate-x-1 transition-transform" />
-          </a>
-        </motion.div>
-      </div>
-    </section>
-  );
-};
-
 const WhyUs = () => {
   return (
     <section id="why" className="grid grid-cols-1 lg:grid-cols-2 min-h-[70vh] lg:min-h-[80vh] overflow-hidden">
@@ -609,16 +475,16 @@ const WhyUs = () => {
         >
           <span className="text-[10px] font-bold tracking-[0.4em] text-gold uppercase mb-6 block drop-shadow-sm">The Contractor Choice</span>
           <h2 className="font-condensed text-4xl sm:text-6xl md:text-8xl font-extrabold text-white-off mb-8 sm:mb-12 uppercase leading-[0.85]">
-            Engineered For<br /><span className="text-gold">Site Teams</span>
+            Project Controls<br /><span className="text-gold">Redefined</span>
           </h2>
           
           <div className="space-y-6 sm:space-y-8">
             {[
-              'Certified CPM schedulers with deep industry field expertise.',
-              'Rapid turnaround: Baseline schedules delivered in 5-7 business days.',
-              'Transparent fixed-price engagement — no hidden hourly overhead.',
-              'Advanced mastery of P6, MS Project, and forensic delay modeling.',
-              'Strategic US-based coordination for seamless communication.'
+              'Experienced scheduling experts with real construction field knowledge.',
+              'Fast delivery: Project schedules completed in 5-7 business days.',
+              'Clear, project-based pricing with no hidden costs.',
+              'Experts in Primavera P6, project logic, and delay analysis.',
+              'Professional scheduling team with clear and fast communication.'
             ].map((point, i) => (
               <motion.div 
                 key={i} 
@@ -670,9 +536,9 @@ const WhyUs = () => {
 
 const Testimonials = () => {
   const reviews = [
-    { name: 'Mike', role: 'Project Manager', company: 'Civil Construction', content: 'Remote Schedulers turned around our baseline in 4 days and the GC loved it. We\'ve used them on every bid since.' },
-    { name: 'Sarah', role: 'Operations Dir', company: 'Urban Build', content: 'Finally found schedulers who actually understand construction logic. Thorough, dependable, and no hand-holding.' },
-    { name: 'Ahmed', role: 'Principal Engineer', company: 'General Contracting', content: 'Their delay analysis saved us $180K on a disputed claim. well-documented, and delivered fast. Highly recommended.' },
+    { name: 'Michael R.', role: 'Project Manager', content: 'They delivered our schedule in 4 days. It was perfect and got approved by the GC right away. We now use them for every project.' },
+    { name: 'Sarah J.', role: 'Operations Director', content: 'A reliable team that really understands construction. Their monthly reports give us exactly the information we need to stay on track.' },
+    { name: 'Ahmed A.', role: 'Principal Engineer', content: 'Their delay analysis was professional and very clear. It helped us secure the time extension we needed on a complex project.' },
   ];
 
   return (
@@ -710,10 +576,37 @@ const Testimonials = () => {
                 </div>
                 <div>
                   <div className="text-navy text-sm font-extrabold tracking-tight">{r.name}</div>
-                  <div className="text-gray-soft text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.15em] mt-0.5">{r.company}</div>
+                  <div className="text-gray-soft text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.15em] mt-0.5">{r.role}</div>
                 </div>
               </div>
             </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const FAQ = () => {
+  const faqs = [
+    { q: "How long does it take to get a schedule?", a: "Most project schedules are finished and delivered within 5 to 7 business days, depending on how complex the project is." },
+    { q: "Do you help with project delays?", a: "Yes. We specialize in delay analysis to help you document project issues and support requests for more time." },
+    { q: "How do you charge for your services?", a: "We provide clear, project-based pricing. The cost depends on the project size and the specific reports your contract requires." }
+  ];
+
+  return (
+    <section className="py-24 sm:py-32 px-4 sm:px-6 bg-white-off">
+      <div className="max-w-4xl mx-auto">
+        <div className="text-center mb-16">
+           <span className="text-[10px] font-bold tracking-[0.4em] text-gold uppercase mb-5 block">Knowledge Base</span>
+           <h2 className="font-condensed text-4xl sm:text-6xl font-extrabold text-navy uppercase tracking-tight">Technical FAQ</h2>
+        </div>
+        <div className="space-y-6">
+          {faqs.map((faq, i) => (
+            <div key={i} className="p-8 border border-navy/5 bg-navy/[0.02] hover:bg-navy/[0.04] transition-colors">
+              <h4 className="text-navy font-bold text-lg mb-3 tracking-tight">{faq.q}</h4>
+              <p className="text-gray-soft text-base font-light leading-relaxed">{faq.a}</p>
+            </div>
           ))}
         </div>
       </div>
@@ -749,10 +642,10 @@ const ContactCTA = () => {
           transition={{ duration: 0.8 }}
         >
           <h2 className="font-display text-5xl sm:text-6xl md:text-9xl text-white-off leading-[0.85] sm:leading-[0.8] mb-8 sm:mb-10 tracking-tighter">
-            READY TO <span className="text-gold">NAVIGATE</span><br />YOUR BUILD?
+            READY TO <span className="text-gold">START</span><br />YOUR PLAN?
           </h2>
           <p className="text-white-off/50 text-base sm:text-lg md:text-xl max-w-2xl mx-auto mb-12 sm:mb-16 font-light leading-relaxed px-4 sm:px-0">
-            Submit your site plans for a high-fidelity audit. Our elite scheduling team delivers transparent, fixed-price coordination within 24 hours.
+            Submit your plans for a free review. Our expert team will provide a professional, fixed-price quote within 24 hours.
           </p>
 
           <form onSubmit={handleSubmit} className="max-w-2xl mx-auto flex flex-col md:flex-row gap-0 group shadow-3xl bg-white-off/5 border border-gold/20">
@@ -842,10 +735,7 @@ const Footer = () => {
               <a href="mailto:info@remoteschedulers.com" className="flex items-center gap-3 hover:text-gold transition-colors duration-300 break-all">
                 <Mail size={14} className="text-gold/50 shrink-0" /> info@remoteschedulers.com
               </a>
-              <div className="flex items-center gap-3 border-l border-gold/20 pl-4">
-                <Phone size={14} className="text-gold/50 shrink-0" /> 512-806-7414
-              </div>
-              <p className="text-[9px] opacity-40 font-medium italic mt-4 tracking-normal normal-case">Operational Support available Mon-Fri, 9AM - 6PM EST</p>
+              <p className="text-[9px] opacity-40 font-medium italic mt-4 tracking-normal normal-case">Operational Support available Mon-Fri, 9AM - 6PM</p>
             </div>
           </div>
         </div>
@@ -900,21 +790,216 @@ const BackToTop = () => {
   );
 };
 
+// --- Quote Modal ---
+
+const QuoteModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) => {
+  const [formData, setFormData] = useState({
+    name: '',
+    company: '',
+    email: '',
+    projectType: 'Commercial',
+    projectSize: '',
+    challenges: ''
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    
+    // Construct mailto link with structured data
+    const subject = `New Quote Request: ${formData.projectType} Project - ${formData.company}`;
+    const body = `
+New Quote Request from Website:
+
+Full Name: ${formData.name}
+Company: ${formData.company}
+Email: ${formData.email}
+Project Type: ${formData.projectType}
+Project Size: ${formData.projectSize}
+
+Key Challenges:
+${formData.challenges}
+    `;
+    
+    // In a real app, this would be an API call
+    console.log('Sending quote request:', formData);
+    
+    setTimeout(() => {
+      setIsSubmitting(false);
+      setIsSuccess(true);
+      
+      // Open mailto as a fallback or primary action if no backend
+      window.location.href = `mailto:info@remoteschedulers.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      
+      setTimeout(() => {
+        onClose();
+        setIsSuccess(false);
+        setFormData({ name: '', company: '', email: '', projectType: 'Commercial', projectSize: '', challenges: '' });
+      }, 3000);
+    }, 1500);
+  };
+
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <>
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={onClose}
+            className="fixed inset-0 bg-navy/80 backdrop-blur-xl z-[200]"
+          />
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+            className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[95%] max-w-2xl bg-white-off z-[210] shadow-4xl border-t-[8px] border-gold p-8 md:p-12"
+          >
+            <button 
+              onClick={onClose}
+              className="absolute top-6 right-6 text-navy/40 hover:text-navy transition-colors"
+            >
+              <X size={28} />
+            </button>
+
+            {isSuccess ? (
+              <div className="py-20 text-center">
+                <motion.div
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  className="w-20 h-20 bg-gold/10 text-gold rounded-full flex items-center justify-center mx-auto mb-8"
+                >
+                  <CheckCircle2 size={40} />
+                </motion.div>
+                <h3 className="font-condensed text-4xl font-extrabold text-navy uppercase mb-4">Request Logged</h3>
+                <p className="text-gray-soft text-lg">Your technical brief is opening in your email client. Our team will review and respond within 24 hours.</p>
+              </div>
+            ) : (
+              <form onSubmit={handleSubmit}>
+                <div className="mb-10">
+                  <span className="text-[10px] font-bold tracking-[0.4em] text-gold uppercase mb-4 block">Strategic Inquiry</span>
+                  <h3 className="font-condensed text-4xl md:text-5xl font-extrabold text-navy uppercase leading-none">Get a Quote</h3>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-bold uppercase tracking-widest text-navy/40">Full Name</label>
+                    <input 
+                      required
+                      type="text"
+                      value={formData.name}
+                      onChange={e => setFormData({...formData, name: e.target.value})}
+                      className="w-full bg-navy/5 border-b border-navy/10 px-0 py-3 focus:outline-none focus:border-gold transition-colors font-medium text-navy"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-bold uppercase tracking-widest text-navy/40">Company Name</label>
+                    <input 
+                      required
+                      type="text"
+                      value={formData.company}
+                      onChange={e => setFormData({...formData, company: e.target.value})}
+                      className="w-full bg-navy/5 border-b border-navy/10 px-0 py-3 focus:outline-none focus:border-gold transition-colors font-medium text-navy"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-bold uppercase tracking-widest text-navy/40">Professional Email</label>
+                    <input 
+                      required
+                      type="email"
+                      value={formData.email}
+                      onChange={e => setFormData({...formData, email: e.target.value})}
+                      className="w-full bg-navy/5 border-b border-navy/10 px-0 py-3 focus:outline-none focus:border-gold transition-colors font-medium text-navy"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-bold uppercase tracking-widest text-navy/40">Project Type</label>
+                    <select 
+                      value={formData.projectType}
+                      onChange={e => setFormData({...formData, projectType: e.target.value})}
+                      className="w-full bg-navy/5 border-b border-navy/10 px-0 py-3 focus:outline-none focus:border-gold transition-colors font-medium text-navy appearance-none"
+                    >
+                      <option>Commercial</option>
+                      <option>Infrastructure</option>
+                      <option>Industrial</option>
+                      <option>Residential</option>
+                      <option>Other</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="space-y-2 mb-6">
+                  <label className="text-[10px] font-bold uppercase tracking-widest text-navy/40">Project Size / Budget</label>
+                  <input 
+                    type="text"
+                    placeholder="e.g. $10M / 50,000 SF"
+                    value={formData.projectSize}
+                    onChange={e => setFormData({...formData, projectSize: e.target.value})}
+                    className="w-full bg-navy/5 border-b border-navy/10 px-0 py-3 focus:outline-none focus:border-gold transition-colors font-medium text-navy"
+                  />
+                </div>
+
+                <div className="space-y-2 mb-10">
+                  <label className="text-[10px] font-bold uppercase tracking-widest text-navy/40">Key Challenges / Requirements</label>
+                  <textarea 
+                    rows={3}
+                    value={formData.challenges}
+                    onChange={e => setFormData({...formData, challenges: e.target.value})}
+                    className="w-full bg-navy/5 border-b border-navy/10 px-0 py-3 focus:outline-none focus:border-gold transition-colors font-medium text-navy resize-none"
+                    placeholder="Briefly describe your scheduling needs..."
+                  />
+                </div>
+
+                <button 
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="w-full bg-navy text-gold py-6 font-bold uppercase tracking-[0.3em] text-xs hover:bg-gold hover:text-navy transition-all flex items-center justify-center gap-3 disabled:opacity-50"
+                >
+                  {isSubmitting ? (
+                    <div className="w-5 h-5 border-2 border-gold border-t-transparent rounded-full animate-spin"></div>
+                  ) : (
+                    <>
+                      <span>Generate Professional Brief</span>
+                      <ChevronRight size={18} />
+                    </>
+                  )}
+                </button>
+              </form>
+            )}
+          </motion.div>
+        </>
+      )}
+    </AnimatePresence>
+  );
+};
+
 export default function App() {
+  const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false);
+
   return (
     <div className="min-h-screen bg-white-off overflow-x-hidden selection:bg-gold selection:text-navy">
       <BackToTop />
-      <Header />
-      <Hero />
+      <Header onOpenQuote={() => setIsQuoteModalOpen(true)} />
+      <Hero onOpenQuote={() => setIsQuoteModalOpen(true)} />
       <Stats />
       <Services />
       <Process />
-      <PaymentInfrastructure />
       <WhyUs />
       <Testimonials />
+      <FAQ />
       <ContactCTA />
       <Footer />
       <ChatBot />
+      <QuoteModal 
+        isOpen={isQuoteModalOpen} 
+        onClose={() => setIsQuoteModalOpen(false)} 
+      />
     </div>
   );
 }

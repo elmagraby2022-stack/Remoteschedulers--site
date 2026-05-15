@@ -28,12 +28,33 @@ export const ChatBot = () => {
     if (!input.trim() || isLoading) return;
 
     const userMessage = input.trim();
+    const lowercaseInput = userMessage.toLowerCase();
     setInput('');
     setMessages(prev => [...prev, { role: 'user', parts: [{ text: userMessage }] }]);
     setIsLoading(true);
 
+    // Rule-based priority handlers
+    let priorityResponse = '';
+    if (lowercaseInput.includes('payment') || lowercaseInput.includes('price') || lowercaseInput.includes('pricing') || lowercaseInput.includes('cost')) {
+      priorityResponse = 'Pricing and payment arrangements are handled directly by our team. Costs depend on project duration, type, specific requirements, and total project value. Please contact info@remoteschedulers.com for details.';
+    } else if (lowercaseInput.includes('sample') || lowercaseInput.includes('example')) {
+      priorityResponse = 'Please let us know what type of scheduling sample you are looking for, and our team will send it within approximately 2 business days.';
+    } else if (lowercaseInput.includes('call') || lowercaseInput.includes('contact') || lowercaseInput.includes('consultation') || lowercaseInput.includes('phone') || lowercaseInput.includes('email')) {
+      priorityResponse = 'You can reach our scheduling team directly via email at info@remoteschedulers.com to schedule a consultation or request a quote.';
+    } else if (lowercaseInput.includes('service') || lowercaseInput.includes('what do you do') || lowercaseInput.includes('capabilities')) {
+      priorityResponse = 'Remote Schedulers provides expert project controls, including Primavera P6 CPM baseline development, monthly progress updates, cost/resource loading, and forensic delay analysis. We specialize in submission-ready schedules for commercial and EPC projects.';
+    }
+
+    if (priorityResponse) {
+      setTimeout(() => {
+        setMessages(prev => [...prev, { role: 'model', parts: [{ text: priorityResponse }] }]);
+        setIsLoading(false);
+      }, 800);
+      return;
+    }
+
     try {
-      const history = messages.slice(0, -1); // Basic history management
+      const history = messages.slice(0, -1);
       let currentModelResponse = '';
       
       setMessages(prev => [...prev, { role: 'model', parts: [{ text: '' }] }]);

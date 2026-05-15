@@ -21,7 +21,7 @@ About Remote Schedulers:
 - Our pricing is fixed per project (transparent), unlike other firms that often charge hourly.
 - Payment Terms: 30% down payment is required to start. We accept Credit Cards.
 - Payment Portal: Clients can process payments directly on our website in the "Payment" section.
-- We are US-based but support projects globally, with a focus on General Contractors in the US, Gulf, and Middle East regions.
+- We are a professional remote scheduling firm supporting projects globally, with a focus on General Contractors in the US, Gulf, and Middle East regions.
 - Our team includes more than 30 expert planning engineers across the Gulf and Middle East.
 - Our firm is led by senior planning professionals and strategic forensic schedulers.
 
