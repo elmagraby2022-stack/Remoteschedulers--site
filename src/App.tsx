@@ -63,7 +63,7 @@ const Header = ({ onOpenQuote }: { onOpenQuote: () => void }) => {
           
           <div className="order-1 md:order-2">
             <span className="bg-navy text-gold px-4 py-1 text-[9px] md:text-[10px] rounded-full shadow-lg whitespace-nowrap">
-              Now accepting new CPM Baseline engagements for Q3/Q4.
+              30% discount for the first 20 General Contractors.
             </span>
           </div>
           
@@ -342,7 +342,7 @@ const Services = () => {
   const comparison = [
     { feature: 'Turnaround Time', remote: '5-7 Days', typical: '14-21 Days' },
     { feature: 'Pricing Model', remote: 'Project-Based', typical: 'Hourly/Variable' },
-    { feature: 'Payment Logic', remote: 'Direct Invoicing', typical: 'Manual/Unstructured' },
+    { feature: 'Strategic Focus', remote: 'Tactical Planning', typical: 'Basic Scheduling' },
     { feature: 'Software Compatibility', remote: 'P6, MS Project', typical: 'P6 Only/MS Project' },
   ];
 
@@ -408,7 +408,7 @@ const Services = () => {
 const Process = () => {
   const steps = [
     { num: '01', title: 'Submit Plans', desc: 'Securely send us your project drawings and documents for a professional review.' },
-    { num: '02', title: 'Get the quote with discount', desc: 'We review your requirements and provide a fixed-price proposal within 24 hours.' },
+    { num: '02', title: '30% Discount Quote', desc: 'The first 20 General Contractors receive a 30% discount on their first technical schedule proposal.' },
     { num: '03', title: 'Coordination', desc: 'Our coordinator connects our engineers with your PM to gather logic data, NTP, and mobilization dates.' },
     { num: '04', title: 'Technical Build', desc: 'Our experts build your project schedule, making sure it follows all rules and construction logic.' },
     { num: '05', title: 'Final Delivery', desc: 'Receive your professional schedule in 5-7 business days. We provide P6 files and clear PDF reports.' },
@@ -721,7 +721,7 @@ const Footer = () => {
           <div className="space-y-6 pt-8 border-t border-white-off/5 sm:pt-0 sm:border-0">
             <h5 className="text-gold text-[9px] sm:text-[10px] font-extrabold tracking-[0.4em] uppercase mb-6 sm:mb-8">Navigation</h5>
             <ul className="space-y-4 text-white-off/40 text-[11px] sm:text-xs font-bold uppercase tracking-[0.2em]">
-              {['Services', 'Process', 'Payments', 'Why Us', 'Contact'].map(link => (
+              {['Services', 'Process', 'Why Us', 'Contact'].map(link => (
                 <li key={link}>
                   <a href={`#${link.toLowerCase().replace(' ', '')}`} className="hover:text-gold transition-colors inline-block hover:translate-x-1 duration-300">{link}</a>
                 </li>
