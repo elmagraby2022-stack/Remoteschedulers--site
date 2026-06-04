@@ -27,9 +27,16 @@ import { ChatBot } from './components/ChatBot';
 
 // --- Sub-components ---
 
-const Header = ({ onOpenQuote }: { onOpenQuote: () => void }) => {
+const Header = ({ 
+  isMobileMenuOpen, 
+  setIsMobileMenuOpen, 
+  onOpenQuote 
+}: { 
+  isMobileMenuOpen: boolean; 
+  setIsMobileMenuOpen: (open: boolean) => void; 
+  onOpenQuote: () => void; 
+}) => {
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, {
     stiffness: 100,
@@ -43,6 +50,15 @@ const Header = ({ onOpenQuote }: { onOpenQuote: () => void }) => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+      return () => {
+        document.body.style.overflow = '';
+      };
+    }
+  }, [isMobileMenuOpen]);
+
   const navLinks = [
     { name: 'Services', href: '#services' },
     { name: 'Process', href: '#process' },
@@ -51,7 +67,7 @@ const Header = ({ onOpenQuote }: { onOpenQuote: () => void }) => {
   ];
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-[100] transition-all duration-500">
+    <header className={`fixed top-0 left-0 right-0 transition-all duration-500 ${isMobileMenuOpen ? 'z-[9999]' : 'z-[50]'}`}>
       {/* Integrated Top Bar */}
       <div className={`bg-gold text-navy transition-all duration-500 overflow-hidden ${isScrolled ? 'h-0 opacity-0' : 'h-auto py-3 md:py-1.5'}`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col md:flex-row justify-between items-center gap-2 md:gap-8 text-[9px] sm:text-[10px] md:text-[11px] font-bold uppercase tracking-wider text-center md:text-left">
@@ -59,11 +75,18 @@ const Header = ({ onOpenQuote }: { onOpenQuote: () => void }) => {
             <a href="mailto:info@remoteschedulers.com" className="hover:opacity-70 transition-all flex items-center gap-2">
               <Mail size={12} className="shrink-0" /> <span className="hidden sm:inline">info@remoteschedulers.com</span><span className="sm:hidden">Email</span>
             </a>
+            <span className="flex items-center gap-2 border-l border-navy/10 pl-4 md:pl-8">
+              <Phone size={12} className="shrink-0" /> 
+              <a href="tel:7327162718" className="hover:opacity-70 transition-all flex items-center gap-1">
+                <span className="hidden sm:inline">732-716-2718</span>
+                <span className="sm:hidden">Call</span>
+              </a>
+            </span>
           </div>
           
           <div className="order-1 md:order-2">
             <span className="bg-navy text-gold px-4 py-1 text-[9px] md:text-[10px] rounded-full shadow-lg whitespace-nowrap">
-              30% discount for the first 20 General Contractors.
+              30% discount for the first 20 Customers.
             </span>
           </div>
           
@@ -123,7 +146,7 @@ const Header = ({ onOpenQuote }: { onOpenQuote: () => void }) => {
           </button>
         </div>
 
-        {/* Mobile Menu - Off-canvas Slide-in */}
+        {/* Mobile Menu - Full-screen centered and scrollable overlay */}
         <AnimatePresence>
           {isMobileMenuOpen && (
             <>
@@ -133,68 +156,87 @@ const Header = ({ onOpenQuote }: { onOpenQuote: () => void }) => {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="fixed inset-0 bg-navy/60 backdrop-blur-md z-[110] md:hidden"
+                className="fixed inset-0 backdrop-blur-md z-[10000] md:hidden bg-navy/85 overscroll-contain"
               />
               
               {/* Drawer */}
               <motion.div 
-                initial={{ x: '100%' }}
-                animate={{ x: 0 }}
-                exit={{ x: '100%' }}
-                transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-                className="fixed top-0 right-0 bottom-0 w-[85%] max-w-[400px] bg-navy z-[120] md:hidden shadow-4xl flex flex-col p-8 border-l border-gold/20"
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.3, ease: 'easeOut' }}
+                className="fixed inset-0 w-screen h-screen bg-navy z-[10001] md:hidden shadow-4xl overflow-y-auto overscroll-contain flex flex-col"
               >
-                <div className="flex justify-between items-center mb-16">
-                  <div className="flex flex-col leading-none">
-                    <span className="font-condensed text-xl font-extrabold tracking-wider text-gold uppercase">
-                      Remote <span className="text-white-off">Schedulers</span>
-                    </span>
-                  </div>
-                  <button 
-                    className="text-gold p-2 hover:bg-gold/10 rounded-full transition-colors"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    <X size={28} />
-                  </button>
-                </div>
-
-                <div className="flex flex-col space-y-8">
-                  {navLinks.map((link, i) => (
-                    <motion.a 
-                      initial={{ opacity: 0, x: 20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.1 + i * 0.05 }}
-                      key={link.name}
-                      href={link.href}
-                      className="text-3xl font-condensed font-bold tracking-widest text-white-off uppercase hover:text-gold transition-colors flex items-center justify-between group"
+                <div className="w-full flex-1 flex flex-col justify-between p-6 xs:p-8 min-h-full">
+                  {/* Top Header */}
+                  <div className="flex justify-between items-center mb-10 shrink-0">
+                    <div className="flex flex-col leading-none">
+                      <span className="font-condensed text-xl font-extrabold tracking-wider text-gold uppercase">
+                        Remote <span className="text-white-off">Schedulers</span>
+                      </span>
+                    </div>
+                    <button 
+                      className="text-gold p-2 hover:bg-gold/10 rounded-full transition-colors"
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
-                      {link.name}
-                      <ChevronRight size={20} className="text-gold opacity-0 group-hover:opacity-100 transition-all -translate-x-2 group-hover:translate-x-0" />
-                    </motion.a>
-                  ))}
-                </div>
+                      <X size={28} />
+                    </button>
+                  </div>
 
-                <div className="mt-auto pt-10 border-t border-white-off/10 space-y-8">
-                  <motion.button 
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.4 }}
-                    onClick={() => {
-                      setIsMobileMenuOpen(false);
-                      onOpenQuote();
-                    }}
-                    className="bg-gold text-navy w-full text-center py-5 text-xl font-bold tracking-[0.2em] uppercase rounded-sm shadow-xl block"
-                  >
-                    Get a Quote
-                  </motion.button>
+                  {/* Centered and readable links for small screens */}
+                  <div className="flex flex-col space-y-6 xs:space-y-8 my-auto py-6 items-center text-center">
+                    {navLinks.map((link, i) => (
+                      <motion.a 
+                        initial={{ opacity: 0, y: 15 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.05 + i * 0.05 }}
+                        key={link.name}
+                        href={link.href}
+                        className="text-2xl xs:text-3xl font-condensed font-bold tracking-widest text-white-off hover:text-gold uppercase transition-colors flex items-center gap-2 group py-1"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          document.body.style.overflow = '';
+                          setIsMobileMenuOpen(false);
+                          const targetId = link.href.replace('#', '');
+                          setTimeout(() => {
+                            const targetElement = document.getElementById(targetId);
+                            if (targetElement) {
+                              targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                            }
+                          }, 150);
+                        }}
+                      >
+                        {link.name}
+                      </motion.a>
+                    ))}
+                  </div>
 
-                  <div className="space-y-4">
-                    <p className="text-gold text-[10px] font-bold tracking-[0.3em] uppercase">Quick Contact</p>
-                    <div className="flex flex-col space-y-4">
-                      <a href="mailto:info@remoteschedulers.com" className="text-white-off/60 text-sm font-medium flex items-center gap-3">
-                        <Mail size={16} className="text-gold" /> info@remoteschedulers.com
-                      </a>
+                  {/* Fully responsive with layout spacing */}
+                  <div className="mt-auto pt-6 border-t border-white-off/10 space-y-6 shrink-0 w-full max-w-sm mx-auto">
+                    <motion.button 
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.3 }}
+                      onClick={() => {
+                        document.body.style.overflow = '';
+                        setIsMobileMenuOpen(false);
+                        onOpenQuote();
+                      }}
+                      className="bg-gold hover:bg-gold-light active:scale-95 transition-all text-navy w-full text-center py-4 text-base xs:text-lg font-bold tracking-[0.2em] uppercase rounded-sm shadow-xl block"
+                    >
+                      Get a Quote
+                    </motion.button>
+
+                    <div className="space-y-3 text-center">
+                      <p className="text-gold text-[9px] font-bold tracking-[0.3em] uppercase">Quick Contact</p>
+                      <div className="flex flex-col items-center space-y-2.5">
+                        <a href="mailto:info@remoteschedulers.com" className="text-white-off/60 text-xs xs:text-sm font-medium flex items-center gap-2.5 hover:text-gold transition-colors">
+                          <Mail size={14} className="text-gold" /> info@remoteschedulers.com
+                        </a>
+                        <a href="tel:7327162718" className="text-white-off/60 text-xs xs:text-sm font-medium flex items-center gap-2.5 hover:text-gold transition-colors">
+                          <Phone size={14} className="text-gold" /> 732-716-2718
+                        </a>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -234,7 +276,7 @@ const Hero = ({ onOpenQuote }: { onOpenQuote: () => void }) => {
             <span className="inline-flex items-center gap-3 border border-gold/50 text-gold px-3 sm:px-4 py-2 text-[9px] sm:text-[10px] font-bold tracking-[0.4em] uppercase mb-6 sm:mb-8 backdrop-blur-sm">
               <Zap size={12} fill="currentColor" /> Scheduling Expert
             </span>
-            <h1 className="font-display text-7xl sm:text-8xl md:text-[9rem] xl:text-[10rem] leading-[0.85] md:leading-[0.82] text-white-off tracking-tight mb-8 uppercase">
+            <h1 className="font-display text-4xl xs:text-5xl sm:text-8xl md:text-[9rem] xl:text-[10rem] leading-[0.95] md:leading-[0.82] text-white-off tracking-tight mb-8 uppercase">
               We Plan.<br /><span className="text-gold selection:text-white-off">You Build.</span>
             </h1>
           </motion.div>
@@ -257,7 +299,7 @@ const Hero = ({ onOpenQuote }: { onOpenQuote: () => void }) => {
           >
             <button 
               onClick={onOpenQuote}
-              className="group relative bg-gold hover:bg-gold-light text-navy px-10 sm:px-12 py-5 text-xs font-bold tracking-[0.2em] uppercase flex items-center justify-center sm:justify-start gap-3 overflow-hidden shadow-2xl shadow-gold/20 active:scale-95 transition-all"
+              className="group relative bg-gold hover:bg-gold-light text-navy px-6 xs:px-10 sm:px-12 py-4 sm:py-5 text-xs font-bold tracking-[0.2em] uppercase flex items-center justify-center sm:justify-start gap-3 overflow-hidden shadow-2xl shadow-gold/20 active:scale-95 transition-all"
             >
               <span className="relative z-10">Get a Quote</span>
               <ChevronRight size={18} className="relative z-10 transition-transform group-hover:translate-x-1" />
@@ -359,7 +401,7 @@ const Services = () => {
             >
               Excellence in Planning
             </motion.span>
-            <h2 className="font-condensed text-4xl sm:text-5xl md:text-7xl font-extrabold text-navy leading-[0.95] uppercase">Powerful<br />Solutions</h2>
+            <h2 className="font-condensed text-3xl xs:text-4xl sm:text-5xl md:text-7xl font-extrabold text-navy leading-[0.95] uppercase">Powerful<br />Solutions</h2>
           </div>
           <p className="text-gray-soft max-w-sm text-base leading-relaxed border-l-2 border-gold pl-6 py-1">
             From baseline schedules to critical delay claims — we provide the technical logic required for elite construction performance.
@@ -408,7 +450,7 @@ const Services = () => {
 const Process = () => {
   const steps = [
     { num: '01', title: 'Submit Plans', desc: 'Securely send us your project drawings and documents for a professional review.' },
-    { num: '02', title: '30% Discount Quote', desc: 'The first 20 General Contractors receive a 30% discount on their first technical schedule proposal.' },
+    { num: '02', title: '30% Discount Quote', desc: 'The first 20 Customers receive a 30% discount on their first technical schedule proposal.' },
     { num: '03', title: 'Coordination', desc: 'Our coordinator connects our engineers with your PM to gather logic data, NTP, and mobilization dates.' },
     { num: '04', title: 'Technical Build', desc: 'Our experts build your project schedule, making sure it follows all rules and construction logic.' },
     { num: '05', title: 'Final Delivery', desc: 'Receive your professional schedule in 5-7 business days. We provide P6 files and clear PDF reports.' },
@@ -430,7 +472,7 @@ const Process = () => {
             >
               Efficiency Guaranteed
             </motion.span>
-            <h2 className="font-condensed text-5xl sm:text-6xl md:text-8xl font-extrabold text-white-off uppercase leading-[0.85]">The Modern<br /><span className="text-gold">Workflow</span></h2>
+            <h2 className="font-condensed text-3xl xs:text-4xl sm:text-6xl md:text-8xl font-extrabold text-white-off uppercase leading-[0.9] sm:leading-[0.85]">The Modern<br /><span className="text-gold">Workflow</span></h2>
           </div>
           <p className="text-white-off/50 max-w-sm text-base sm:text-lg leading-relaxed font-light border-l border-gold/30 pl-6 sm:pl-8">
             We've removed the friction from construction planning. Experience a digital-first approach that prioritizes speed and reliability.
@@ -474,7 +516,7 @@ const WhyUs = () => {
            viewport={{ once: true }}
         >
           <span className="text-[10px] font-bold tracking-[0.4em] text-gold uppercase mb-6 block drop-shadow-sm">The Contractor Choice</span>
-          <h2 className="font-condensed text-4xl sm:text-6xl md:text-8xl font-extrabold text-white-off mb-8 sm:mb-12 uppercase leading-[0.85]">
+          <h2 className="font-condensed text-3xl xs:text-4xl sm:text-6xl md:text-8xl font-extrabold text-white-off mb-6 sm:mb-12 uppercase leading-[0.9] sm:leading-[0.85]">
             Project Controls<br /><span className="text-gold">Redefined</span>
           </h2>
           
@@ -553,7 +595,7 @@ const Testimonials = () => {
           >
             Verified Performance
           </motion.span>
-          <h2 className="font-condensed text-4xl sm:text-6xl md:text-7xl font-extrabold text-navy uppercase leading-[0.8] tracking-tight">Client<br />Intelligence</h2>
+          <h2 className="font-condensed text-3xl xs:text-4xl sm:text-6xl md:text-7xl font-extrabold text-navy uppercase leading-[0.9] sm:leading-[0.8] tracking-tight">Client<br />Intelligence</h2>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 sm:gap-10">
@@ -599,7 +641,7 @@ const FAQ = () => {
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-16">
            <span className="text-[10px] font-bold tracking-[0.4em] text-gold uppercase mb-5 block">Knowledge Base</span>
-           <h2 className="font-condensed text-4xl sm:text-6xl font-extrabold text-navy uppercase tracking-tight">Technical FAQ</h2>
+           <h2 className="font-condensed text-3xl xs:text-4xl sm:text-6xl font-extrabold text-navy uppercase tracking-tight">Technical FAQ</h2>
         </div>
         <div className="space-y-6">
           {faqs.map((faq, i) => (
@@ -630,7 +672,7 @@ const ContactCTA = () => {
   };
 
   return (
-    <section id="cta" className="py-24 sm:py-32 px-4 sm:px-6 bg-navy relative overflow-hidden">
+    <section id="contact" className="py-24 sm:py-32 px-4 sm:px-6 bg-navy relative overflow-hidden">
       <div className="absolute top-0 right-0 w-1/2 h-full bg-gold/[0.03] blur-[150px] pointer-events-none rotate-12"></div>
       <div className="absolute bottom-0 left-0 w-1/2 h-full bg-gold/[0.02] blur-[150px] pointer-events-none -rotate-12"></div>
       
@@ -641,7 +683,7 @@ const ContactCTA = () => {
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
         >
-          <h2 className="font-display text-5xl sm:text-6xl md:text-9xl text-white-off leading-[0.85] sm:leading-[0.8] mb-8 sm:mb-10 tracking-tighter">
+          <h2 className="font-display text-3xl xs:text-4xl sm:text-6xl md:text-9xl text-white-off leading-[0.95] sm:leading-[0.8] mb-8 sm:mb-10 tracking-tighter">
             READY TO <span className="text-gold">START</span><br />YOUR PLAN?
           </h2>
           <p className="text-white-off/50 text-base sm:text-lg md:text-xl max-w-2xl mx-auto mb-12 sm:mb-16 font-light leading-relaxed px-4 sm:px-0">
@@ -735,6 +777,9 @@ const Footer = () => {
               <a href="mailto:info@remoteschedulers.com" className="flex items-center gap-3 hover:text-gold transition-colors duration-300 break-all">
                 <Mail size={14} className="text-gold/50 shrink-0" /> info@remoteschedulers.com
               </a>
+              <a href="tel:7327162718" className="flex items-center gap-3 hover:text-gold transition-colors duration-300 break-all">
+                <Phone size={14} className="text-gold/50 shrink-0" /> 732-716-2718
+              </a>
               <p className="text-[9px] opacity-40 font-medium italic mt-4 tracking-normal normal-case">Operational Support available Mon-Fri, 9AM - 6PM</p>
             </div>
           </div>
@@ -754,7 +799,7 @@ const Footer = () => {
   );
 };
 
-const BackToTop = () => {
+const BackToTop = ({ isHidden }: { isHidden: boolean }) => {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -774,7 +819,7 @@ const BackToTop = () => {
 
   return (
     <AnimatePresence>
-      {isVisible && (
+      {isVisible && !isHidden && (
         <motion.button
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -792,7 +837,15 @@ const BackToTop = () => {
 
 // --- Quote Modal ---
 
-const QuoteModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) => {
+const QuoteModal = ({ 
+  isOpen, 
+  onClose,
+  prefilledData
+}: { 
+  isOpen: boolean; 
+  onClose: () => void;
+  prefilledData?: { projectType?: string; challenges?: string; projectSize?: string } | null;
+}) => {
   const [formData, setFormData] = useState({
     name: '',
     company: '',
@@ -803,6 +856,31 @@ const QuoteModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void 
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isOpen]);
+
+  useEffect(() => {
+    if (isOpen) {
+      setFormData({
+        name: '',
+        company: '',
+        email: '',
+        projectType: prefilledData?.projectType || 'Commercial',
+        projectSize: prefilledData?.projectSize || '',
+        challenges: prefilledData?.challenges || ''
+      });
+      setIsSuccess(false);
+    }
+  }, [isOpen, prefilledData]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -850,13 +928,13 @@ ${formData.challenges}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 bg-navy/80 backdrop-blur-xl z-[200]"
+            className="fixed inset-0 bg-navy/80 backdrop-blur-xl z-[30000] overscroll-none touch-none"
           />
           <motion.div 
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[95%] max-w-2xl bg-white-off z-[210] shadow-4xl border-t-[8px] border-gold p-8 md:p-12"
+            className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[95%] max-w-2xl bg-white-off z-[30001] shadow-4xl border-t-[8px] border-gold p-8 md:p-12"
           >
             <button 
               onClick={onClose}
@@ -979,26 +1057,321 @@ ${formData.challenges}
   );
 };
 
+// --- Interactive Contractor Planning & Audit Tools ---
+
+const P6Estimator = ({ onOpenQuoteWithDetails }: { onOpenQuoteWithDetails: (type: string, budget: string, speed: string) => void }) => {
+  const [projectType, setProjectType] = useState('Commercial');
+  const [projectBudget, setProjectBudget] = useState('Under $2M');
+  const [speed, setSpeed] = useState('Standard (5-7 Days)');
+
+  const types = ['Commercial', 'Infrastructure', 'Industrial', 'Residential'];
+  const budgets = ['Under $2M', '$2M - $5M', '$5M - $10M', '$10M - $15M', '$15M - $20M', 'Higher than $20M'];
+  const speeds = ['Standard (5-7 Days)', 'Express (3-4 Days)'];
+
+  const calculatePrice = () => {
+    let basePrice = 2500;
+    
+    if (projectType === 'Infrastructure') basePrice = 3200;
+    if (projectType === 'Industrial') basePrice = 3800;
+    if (projectType === 'Residential') basePrice = 1800;
+
+    if (projectBudget === 'Under $2M') basePrice *= 0.55;
+    if (projectBudget === '$2M - $5M') basePrice *= 0.75;
+    if (projectBudget === '$5M - $10M') basePrice *= 0.9;
+    if (projectBudget === '$10M - $15M') basePrice *= 1.25;
+    if (projectBudget === '$15M - $20M') basePrice *= 1.6;
+
+    if (speed.includes('Express')) basePrice *= 1.4;
+
+    const originalPrice = Math.round(basePrice);
+    const discountedPrice = Math.round(basePrice * 0.7);
+
+    return { original: originalPrice, discounted: discountedPrice };
+  };
+
+  const { original, discounted } = calculatePrice();
+
+  return (
+    <div className="bg-navy p-6 sm:p-10 border-t-[6px] border-gold shadow-3xl text-white-off">
+      <div className="mb-8">
+        <span className="text-[10px] font-bold tracking-[0.4em] text-gold uppercase mb-3 block">DYNAMIC PLANNING SOFTWARE</span>
+        <h3 className="font-condensed text-3xl sm:text-4xl font-extrabold uppercase mb-2">Proposal Price Estimator</h3>
+        <p className="text-white-off/50 text-sm font-light">Configure your construction planning criteria to check professional flat-rate fee expectations with your 30% first-time customer discount automatically applied.</p>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+        {/* Type selection */}
+        <div className="space-y-3">
+          <label className="text-[10px] font-bold uppercase tracking-widest text-gold/80 block">Project Category</label>
+          <div className="grid grid-cols-2 gap-2">
+            {types.map(t => (
+              <button
+                key={t}
+                onClick={() => setProjectType(t)}
+                className={`py-3 px-3 text-[11px] font-bold uppercase border transition-all truncate ${
+                  projectType === t 
+                    ? 'border-gold bg-gold text-navy' 
+                    : 'border-white-off/10 hover:border-gold/50 text-white-off/70 bg-navy/20'
+                }`}
+              >
+                {t}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Budget selection */}
+        <div className="space-y-3">
+          <label className="text-[10px] font-bold uppercase tracking-widest text-gold/80 block">Estimated Budget / Size</label>
+          <div className="grid grid-cols-2 gap-2">
+            {budgets.map(b => (
+              <button
+                key={b}
+                onClick={() => setProjectBudget(b)}
+                className={`py-3 px-3 text-[11px] font-bold uppercase border transition-all truncate ${
+                  projectBudget === b 
+                    ? 'border-gold bg-gold text-navy' 
+                    : 'border-white-off/10 hover:border-gold/50 text-white-off/70 bg-navy/20'
+                }`}
+              >
+                {b}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Speed selection */}
+        <div className="space-y-3">
+          <label className="text-[10px] font-bold uppercase tracking-widest text-gold/80 block">Turnaround Option</label>
+          <div className="flex flex-col gap-2">
+            {speeds.map(s => (
+              <button
+                key={s}
+                onClick={() => setSpeed(s)}
+                className={`py-3 px-4 text-[11px] font-bold uppercase border transition-all text-left flex justify-between items-center ${
+                  speed === s 
+                    ? 'border-gold bg-gold text-navy' 
+                    : 'border-white-off/10 hover:border-gold/50 text-white-off/70 bg-navy/20'
+                }`}
+              >
+                <span>{s}</span>
+                {s.includes('Express') && <span className="text-[9px] bg-red-600 text-white px-2 py-0.5 rounded-sm font-extrabold uppercase tracking-wider">Priority</span>}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Calculator results */}
+      <div className="border-t border-white-off/10 pt-8 flex flex-col md:flex-row items-center justify-between gap-8 bg-black/30 p-6 sm:p-8 rounded-sm">
+        {projectBudget === 'Higher than $20M' ? (
+          <div className="text-center md:text-left flex-1">
+            <span className="text-[9px] font-bold tracking-[0.3em] text-gold uppercase block mb-1">Custom Scheduling Scope</span>
+            <div className="text-xl sm:text-2xl font-condensed font-extrabold text-white-off uppercase leading-tight mt-2">
+              Please reach out by email or phone to discuss further
+            </div>
+            <p className="text-[11px] text-white-off/50 mt-3 font-sans">
+              For projects exceeding $20M, custom baseline constraints and compliance criteria apply. Call <a href="tel:7327162718" className="text-gold font-bold hover:underline">732-716-2718</a> or email <a href="mailto:info@remoteschedulers.com" className="text-gold font-bold hover:underline">info@remoteschedulers.com</a> to finalize details.
+            </p>
+          </div>
+        ) : (
+          <div className="text-center md:text-left">
+            <span className="text-[9px] font-bold tracking-[0.3em] text-gold uppercase block mb-1">Estimated Setup Fee</span>
+            <div className="flex flex-col sm:flex-row sm:items-baseline justify-center md:justify-start gap-3 sm:gap-4">
+              <span className="text-4xl sm:text-5xl font-condensed font-extrabold text-white-off">${discounted.toLocaleString()}</span>
+              <span className="text-lg sm:text-xl font-condensed font-bold text-white-off/30 line-through">${original.toLocaleString()}</span>
+              <span className="text-[10px] bg-gold/15 text-gold px-2.5 py-1 font-extrabold rounded-sm uppercase tracking-wider self-center sm:self-auto">30% DISCOUNT APPLIED</span>
+            </div>
+            <p className="text-[11px] text-white-off/40 mt-2">Professional, CPM-validated fixed-fee baseline proposal. Delivers ready-to-submit .xer files in 5-7 days.</p>
+          </div>
+        )}
+
+        <button 
+          onClick={() => onOpenQuoteWithDetails(projectType, projectBudget, speed)}
+          className="w-full md:w-auto bg-gold hover:bg-gold-light text-navy py-5 px-10 text-[11px] font-extrabold uppercase tracking-widest transition-transform transform active:scale-95 duration-300 shadow-xl shadow-gold/10 shrink-0"
+        >
+          {projectBudget === 'Higher than $20M' ? 'Contact Our Experts' : 'Claim My 30% Off Proposal'}
+        </button>
+      </div>
+    </div>
+  );
+};
+
+const DCMAAuditChecklist = () => {
+  const [checks, setChecks] = useState([
+    { id: 1, label: 'No Missing Logic Paths', desc: 'Every milestone and build activity must have logical predecessing and succeeding relations.', checked: true },
+    { id: 2, label: 'Zero Lead / Negative Lags', desc: 'Leads and negative lags disrupt the critical path calculations and are barred by owners.', checked: true },
+    { id: 3, label: 'Lags Minimization (<= 5%)', desc: 'Fewer than 5% of relationships should include positive gaps to maintain structural flexibility.', checked: false },
+    { id: 4, label: 'Constraint Constraints Avoided', desc: 'Refrains from "Must Finish On" or hard targets which break natural float dynamics.', checked: true },
+    { id: 5, label: 'Float Cleanliness (< 44 days)', desc: 'Extremely high positive total float often signals missing downstream connections.', checked: false },
+    { id: 6, label: 'Zero Negative Float', desc: 'Negative float represents missed targets; schedules must resolve this before submittal.', checked: true },
+    { id: 7, label: 'Activity Span Tracking (< 20 Days)', desc: 'Large activity durations must be split to guarantee fine-grain schedule tracking.', checked: false }
+  ]);
+
+  const toggleCheck = (id: number) => {
+    setChecks(checks.map(c => c.id === id ? { ...c, checked: !c.checked } : c));
+  };
+
+  const score = Math.round((checks.filter(c => c.checked).length / checks.length) * 100);
+
+  const getStatus = () => {
+    if (score === 100) return { text: 'Submissibility-Excellent', color: 'text-green-500 bg-green-500/10' };
+    if (score >= 70) return { text: 'Minor Audit Warnings', color: 'text-gold bg-gold/10' };
+    return { text: 'Critical Logical Errors', color: 'text-red-500 bg-red-500/10' };
+  };
+
+  const status = getStatus();
+
+  return (
+    <div className="bg-[#EDEAE2] p-6 sm:p-10 border border-navy/10 shadow-3xl text-navy">
+      <div className="mb-8 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
+        <div>
+          <span className="text-[10px] font-bold tracking-[0.4em] text-gold uppercase mb-3 block">DIAGNOSTIC AUDIT SOFTWARE</span>
+          <h3 className="font-condensed text-3xl sm:text-4xl font-extrabold uppercase mb-2">DCMA 14-Point Health Checker</h3>
+          <p className="text-gray-soft text-sm font-light">Interactive diagnostic baseline schedule validator. Toggle typical scheduling pain-points to assess your project compliance structure.</p>
+        </div>
+        
+        <div className="bg-navy text-white-off p-5 rounded-sm min-w-[210px] text-center shadow-xl border border-gold/20 shrink-0 self-start lg:self-auto">
+          <span className="text-[9px] font-bold tracking-[0.2em] text-gold uppercase block mb-1">Schedule Quality Rating</span>
+          <div className="text-4xl font-condensed font-extrabold tracking-wider">{score}%</div>
+          <span className={`text-[10px] font-extrabold uppercase tracking-widest px-2.5 py-1 rounded-sm mt-3 inline-block ${status.color}`}>
+            {status.text}
+          </span>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {checks.map(c => (
+          <div 
+            key={c.id}
+            onClick={() => toggleCheck(c.id)}
+            className={`border cursor-pointer p-4 sm:p-5 rounded-sm flex items-start gap-4 transition-all duration-300 ${
+              c.checked 
+                ? 'bg-navy/5 border-navy/20 shadow-sm' 
+                : 'bg-transparent border-navy/10 hover:border-gold/30'
+            }`}
+          >
+            <div className={`w-5 h-5 rounded-sm border flex items-center justify-center shrink-0 mt-0.5 transition-all ${
+              c.checked 
+                ? 'bg-navy border-navy text-gold' 
+                : 'border-navy/30 text-transparent'
+            }`}>
+              <CheckCircle2 size={12} className="fill-current" />
+            </div>
+            <div>
+              <h4 className="font-bold text-xs sm:text-sm uppercase tracking-wider text-navy mb-1 flex items-center gap-2">
+                {c.label}
+              </h4>
+              <p className="text-[11px] sm:text-xs text-gray-soft font-light leading-relaxed">{c.desc}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className="mt-8 border-t border-navy/10 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <p className="text-xs text-gray-soft italic font-light">This checker models primary DCMA baseline logics. Remote Schedulers builds 100% compliant premium deliverables.</p>
+        <a 
+          href="#contact"
+          className="text-xs font-bold uppercase text-navy border-b-[2px] border-gold hover:text-gold tracking-widest transition-colors py-1 inline-block"
+        >
+          Request Expert Forensic Logic Audit
+        </a>
+      </div>
+    </div>
+  );
+};
+
+const PlanningTools = ({ onOpenQuoteWithDetails }: { onOpenQuoteWithDetails: (type: string, budget: string, speed: string) => void }) => {
+  const [activeTab, setActiveTab] = useState<'estimator' | 'audit'>('estimator');
+
+  return (
+    <section className="py-20 sm:py-24 px-4 sm:px-6 bg-white-off overflow-hidden border-t border-gold/10">
+      <div className="max-w-7xl mx-auto">
+        <div className="text-center mb-12 sm:mb-16">
+          <span className="text-[10px] font-bold tracking-[0.4em] text-gold uppercase mb-4 block">Interactive Builder Tools</span>
+          <h2 className="font-condensed text-3xl xs:text-4xl sm:text-5xl md:text-7xl font-extrabold text-navy uppercase leading-[0.9] sm:leading-[0.8] tracking-tight">Contractor<br />Planner Suite</h2>
+          
+          <div className="flex justify-center mt-8 sm:mt-12 gap-3">
+            <button
+              onClick={() => setActiveTab('estimator')}
+              className={`py-3.5 px-6 sm:px-10 text-[11px] font-extrabold uppercase tracking-widest transition-all ${
+                activeTab === 'estimator'
+                  ? 'bg-navy text-gold shadow-lg shadow-navy/10 border-b-2 border-gold'
+                  : 'bg-navy/5 text-navy/60 hover:bg-navy/10'
+              }`}
+            >
+              Price Estimator (-30% applied)
+            </button>
+            <button
+              onClick={() => setActiveTab('audit')}
+              className={`py-3.5 px-6 sm:px-10 text-[11px] font-extrabold uppercase tracking-widest transition-all ${
+                activeTab === 'audit'
+                  ? 'bg-navy text-gold shadow-lg shadow-navy/10 border-b-2 border-gold'
+                  : 'bg-navy/5 text-navy/60 hover:bg-navy/10'
+              }`}
+            >
+              DCMA Schedule Quality Checker
+            </button>
+          </div>
+        </div>
+
+        <motion.div
+          key={activeTab}
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+        >
+          {activeTab === 'estimator' ? (
+            <P6Estimator onOpenQuoteWithDetails={onOpenQuoteWithDetails} />
+          ) : (
+            <DCMAAuditChecklist />
+          )}
+        </motion.div>
+      </div>
+    </section>
+  );
+};
+
 export default function App() {
   const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [prefilledData, setPrefilledData] = useState<{ projectType?: string; challenges?: string; projectSize?: string } | null>(null);
+
+  const handleOpenQuoteWithDetails = (type: string, budget: string, speed: string) => {
+    setPrefilledData({
+      projectType: type,
+      projectSize: budget,
+      challenges: `Priority setup: ${speed}. Please provide a 30% discounted estimate of professional scheduling services for this project.`
+    });
+    setIsQuoteModalOpen(true);
+  };
 
   return (
     <div className="min-h-screen bg-white-off overflow-x-hidden selection:bg-gold selection:text-navy">
-      <BackToTop />
-      <Header onOpenQuote={() => setIsQuoteModalOpen(true)} />
+      <BackToTop isHidden={isMobileMenuOpen} />
+      <Header 
+        isMobileMenuOpen={isMobileMenuOpen} 
+        setIsMobileMenuOpen={setIsMobileMenuOpen} 
+        onOpenQuote={() => setIsQuoteModalOpen(true)} 
+      />
       <Hero onOpenQuote={() => setIsQuoteModalOpen(true)} />
       <Stats />
       <Services />
       <Process />
       <WhyUs />
+      <PlanningTools onOpenQuoteWithDetails={handleOpenQuoteWithDetails} />
       <Testimonials />
       <FAQ />
       <ContactCTA />
       <Footer />
-      <ChatBot />
+      <ChatBot isHidden={isMobileMenuOpen} />
       <QuoteModal 
         isOpen={isQuoteModalOpen} 
-        onClose={() => setIsQuoteModalOpen(false)} 
+        onClose={() => {
+          setIsQuoteModalOpen(false);
+          setPrefilledData(null);
+        }} 
+        prefilledData={prefilledData}
       />
     </div>
   );
