@@ -922,25 +922,23 @@ ${formData.challenges}
   return (
     <AnimatePresence>
       {isOpen && (
-        <>
-          <motion.div 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={onClose}
-            className="fixed inset-0 bg-navy/80 backdrop-blur-xl z-[30000] overscroll-none touch-none"
-          />
+        <div className="fixed inset-0 z-[30001] overflow-y-auto bg-navy/80 backdrop-blur-xl flex items-start sm:items-center justify-center p-4 md:p-10">
+          {/* Backdrop click zone to close on background interaction */}
+          <div className="fixed inset-0 cursor-pointer" onClick={onClose} />
+          
           <motion.div 
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[95%] max-w-2xl bg-white-off z-[30001] shadow-4xl border-t-[8px] border-gold p-8 md:p-12"
+            className="relative w-full max-w-2xl bg-white-off shadow-4xl border-t-[8px] border-gold p-6 xs:p-8 md:p-12 my-auto z-10"
           >
+            {/* Highly visible rounded Close Button with a comfortable tap target for mobile users */}
             <button 
               onClick={onClose}
-              className="absolute top-6 right-6 text-navy/40 hover:text-navy transition-colors"
+              aria-label="Close modal"
+              className="absolute top-4 right-4 sm:top-6 sm:right-6 w-10 h-10 rounded-full bg-navy/5 text-navy/60 hover:text-navy hover:bg-navy/10 transition-all flex items-center justify-center cursor-pointer z-20"
             >
-              <X size={28} />
+              <X size={20} />
             </button>
 
             {isSuccess ? (
@@ -954,54 +952,60 @@ ${formData.challenges}
                 </motion.div>
                 <h3 className="font-condensed text-4xl font-extrabold text-navy uppercase mb-4">Request Logged</h3>
                 <p className="text-gray-soft text-lg">Your technical brief is opening in your email client. Our team will review and respond within 24 hours.</p>
+                <button
+                  onClick={onClose}
+                  className="mt-8 px-8 py-3.5 bg-navy text-gold uppercase font-bold text-xs tracking-widest hover:bg-gold hover:text-navy transition-colors cursor-pointer"
+                >
+                  Close Window
+                </button>
               </div>
             ) : (
               <form onSubmit={handleSubmit}>
-                <div className="mb-10">
-                  <span className="text-[10px] font-bold tracking-[0.4em] text-gold uppercase mb-4 block">Strategic Inquiry</span>
-                  <h3 className="font-condensed text-4xl md:text-5xl font-extrabold text-navy uppercase leading-none">Get a Quote</h3>
+                <div className="mb-8">
+                  <span className="text-[10px] font-bold tracking-[0.4em] text-gold uppercase mb-3 block">Strategic Inquiry</span>
+                  <h3 className="font-condensed text-3xl sm:text-4xl md:text-5xl font-extrabold text-navy uppercase leading-none">Get a Quote</h3>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                  <div className="space-y-2">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-5">
+                  <div className="space-y-1">
                     <label className="text-[10px] font-bold uppercase tracking-widest text-navy/40">Full Name</label>
                     <input 
                       required
                       type="text"
                       value={formData.name}
                       onChange={e => setFormData({...formData, name: e.target.value})}
-                      className="w-full bg-navy/5 border-b border-navy/10 px-0 py-3 focus:outline-none focus:border-gold transition-colors font-medium text-navy"
+                      className="w-full bg-navy/5 border-b border-navy/10 px-3 py-2.5 focus:outline-none focus:border-gold transition-colors font-medium text-navy text-sm"
                     />
                   </div>
-                  <div className="space-y-2">
+                  <div className="space-y-1">
                     <label className="text-[10px] font-bold uppercase tracking-widest text-navy/40">Company Name</label>
                     <input 
                       required
                       type="text"
                       value={formData.company}
                       onChange={e => setFormData({...formData, company: e.target.value})}
-                      className="w-full bg-navy/5 border-b border-navy/10 px-0 py-3 focus:outline-none focus:border-gold transition-colors font-medium text-navy"
+                      className="w-full bg-navy/5 border-b border-navy/10 px-3 py-2.5 focus:outline-none focus:border-gold transition-colors font-medium text-navy text-sm"
                     />
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                  <div className="space-y-2">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-5">
+                  <div className="space-y-1">
                     <label className="text-[10px] font-bold uppercase tracking-widest text-navy/40">Professional Email</label>
                     <input 
                       required
                       type="email"
                       value={formData.email}
                       onChange={e => setFormData({...formData, email: e.target.value})}
-                      className="w-full bg-navy/5 border-b border-navy/10 px-0 py-3 focus:outline-none focus:border-gold transition-colors font-medium text-navy"
+                      className="w-full bg-navy/5 border-b border-navy/10 px-3 py-2.5 focus:outline-none focus:border-gold transition-colors font-medium text-navy text-sm"
                     />
                   </div>
-                  <div className="space-y-2">
+                  <div className="space-y-1">
                     <label className="text-[10px] font-bold uppercase tracking-widest text-navy/40">Project Type</label>
                     <select 
                       value={formData.projectType}
                       onChange={e => setFormData({...formData, projectType: e.target.value})}
-                      className="w-full bg-navy/5 border-b border-navy/10 px-0 py-3 focus:outline-none focus:border-gold transition-colors font-medium text-navy appearance-none"
+                      className="w-full bg-navy/5 border-b border-navy/10 px-3 py-2.5 focus:outline-none focus:border-gold transition-colors font-medium text-navy text-sm appearance-none"
                     >
                       <option>Commercial</option>
                       <option>Infrastructure</option>
@@ -1012,46 +1016,56 @@ ${formData.challenges}
                   </div>
                 </div>
 
-                <div className="space-y-2 mb-6">
+                <div className="space-y-1 mb-5">
                   <label className="text-[10px] font-bold uppercase tracking-widest text-navy/40">Project Size / Budget</label>
                   <input 
                     type="text"
                     placeholder="e.g. $10M / 50,000 SF"
                     value={formData.projectSize}
                     onChange={e => setFormData({...formData, projectSize: e.target.value})}
-                    className="w-full bg-navy/5 border-b border-navy/10 px-0 py-3 focus:outline-none focus:border-gold transition-colors font-medium text-navy"
+                    className="w-full bg-navy/5 border-b border-navy/10 px-3 py-2.5 focus:outline-none focus:border-gold transition-colors font-medium text-navy text-sm"
                   />
                 </div>
 
-                <div className="space-y-2 mb-10">
+                <div className="space-y-1 mb-8">
                   <label className="text-[10px] font-bold uppercase tracking-widest text-navy/40">Key Challenges / Requirements</label>
                   <textarea 
-                    rows={3}
+                    rows={2}
                     value={formData.challenges}
                     onChange={e => setFormData({...formData, challenges: e.target.value})}
-                    className="w-full bg-navy/5 border-b border-navy/10 px-0 py-3 focus:outline-none focus:border-gold transition-colors font-medium text-navy resize-none"
+                    className="w-full bg-navy/5 border-b border-navy/10 px-3 py-2.5 focus:outline-none focus:border-gold transition-colors font-medium text-navy text-sm resize-none"
                     placeholder="Briefly describe your scheduling needs..."
                   />
                 </div>
 
-                <button 
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="w-full bg-navy text-gold py-6 font-bold uppercase tracking-[0.3em] text-xs hover:bg-gold hover:text-navy transition-all flex items-center justify-center gap-3 disabled:opacity-50"
-                >
-                  {isSubmitting ? (
-                    <div className="w-5 h-5 border-2 border-gold border-t-transparent rounded-full animate-spin"></div>
-                  ) : (
-                    <>
-                      <span>Generate Professional Brief</span>
-                      <ChevronRight size={18} />
-                    </>
-                  )}
-                </button>
+                {/* Multi-action Bottom Bar supporting clear submission & direct easy cancellation */}
+                <div className="flex flex-col-reverse sm:flex-row gap-3">
+                  <button 
+                    type="button"
+                    onClick={onClose}
+                    className="flex-1 bg-[#ECE9DF] hover:bg-[#E2DDD0] text-navy py-4 font-bold uppercase tracking-[0.2ex] text-[10px] transition-all text-center cursor-pointer"
+                  >
+                    Cancel & Close
+                  </button>
+                  <button 
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="flex-[2] bg-navy text-gold py-4 px-6 font-bold uppercase tracking-[0.2em] text-[10px] sm:text-xs hover:bg-gold hover:text-navy transition-all flex items-center justify-center gap-2.5 disabled:opacity-50 cursor-pointer"
+                  >
+                    {isSubmitting ? (
+                      <div className="w-5 h-5 border-2 border-gold border-t-transparent rounded-full animate-spin"></div>
+                    ) : (
+                      <>
+                        <span>Generate Professional Brief</span>
+                        <ChevronRight size={16} />
+                      </>
+                    )}
+                  </button>
+                </div>
               </form>
             )}
           </motion.div>
-        </>
+        </div>
       )}
     </AnimatePresence>
   );
@@ -1197,136 +1211,16 @@ const P6Estimator = ({ onOpenQuoteWithDetails }: { onOpenQuoteWithDetails: (type
   );
 };
 
-const DCMAAuditChecklist = () => {
-  const [checks, setChecks] = useState([
-    { id: 1, label: 'No Missing Logic Paths', desc: 'Every milestone and build activity must have logical predecessing and succeeding relations.', checked: true },
-    { id: 2, label: 'Zero Lead / Negative Lags', desc: 'Leads and negative lags disrupt the critical path calculations and are barred by owners.', checked: true },
-    { id: 3, label: 'Lags Minimization (<= 5%)', desc: 'Fewer than 5% of relationships should include positive gaps to maintain structural flexibility.', checked: false },
-    { id: 4, label: 'Constraint Constraints Avoided', desc: 'Refrains from "Must Finish On" or hard targets which break natural float dynamics.', checked: true },
-    { id: 5, label: 'Float Cleanliness (< 44 days)', desc: 'Extremely high positive total float often signals missing downstream connections.', checked: false },
-    { id: 6, label: 'Zero Negative Float', desc: 'Negative float represents missed targets; schedules must resolve this before submittal.', checked: true },
-    { id: 7, label: 'Activity Span Tracking (< 20 Days)', desc: 'Large activity durations must be split to guarantee fine-grain schedule tracking.', checked: false }
-  ]);
-
-  const toggleCheck = (id: number) => {
-    setChecks(checks.map(c => c.id === id ? { ...c, checked: !c.checked } : c));
-  };
-
-  const score = Math.round((checks.filter(c => c.checked).length / checks.length) * 100);
-
-  const getStatus = () => {
-    if (score === 100) return { text: 'Submissibility-Excellent', color: 'text-green-500 bg-green-500/10' };
-    if (score >= 70) return { text: 'Minor Audit Warnings', color: 'text-gold bg-gold/10' };
-    return { text: 'Critical Logical Errors', color: 'text-red-500 bg-red-500/10' };
-  };
-
-  const status = getStatus();
-
-  return (
-    <div className="bg-[#EDEAE2] p-6 sm:p-10 border border-navy/10 shadow-3xl text-navy">
-      <div className="mb-8 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
-        <div>
-          <span className="text-[10px] font-bold tracking-[0.4em] text-gold uppercase mb-3 block">DIAGNOSTIC AUDIT SOFTWARE</span>
-          <h3 className="font-condensed text-3xl sm:text-4xl font-extrabold uppercase mb-2">DCMA 14-Point Health Checker</h3>
-          <p className="text-gray-soft text-sm font-light">Interactive diagnostic baseline schedule validator. Toggle typical scheduling pain-points to assess your project compliance structure.</p>
-        </div>
-        
-        <div className="bg-navy text-white-off p-5 rounded-sm min-w-[210px] text-center shadow-xl border border-gold/20 shrink-0 self-start lg:self-auto">
-          <span className="text-[9px] font-bold tracking-[0.2em] text-gold uppercase block mb-1">Schedule Quality Rating</span>
-          <div className="text-4xl font-condensed font-extrabold tracking-wider">{score}%</div>
-          <span className={`text-[10px] font-extrabold uppercase tracking-widest px-2.5 py-1 rounded-sm mt-3 inline-block ${status.color}`}>
-            {status.text}
-          </span>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {checks.map(c => (
-          <div 
-            key={c.id}
-            onClick={() => toggleCheck(c.id)}
-            className={`border cursor-pointer p-4 sm:p-5 rounded-sm flex items-start gap-4 transition-all duration-300 ${
-              c.checked 
-                ? 'bg-navy/5 border-navy/20 shadow-sm' 
-                : 'bg-transparent border-navy/10 hover:border-gold/30'
-            }`}
-          >
-            <div className={`w-5 h-5 rounded-sm border flex items-center justify-center shrink-0 mt-0.5 transition-all ${
-              c.checked 
-                ? 'bg-navy border-navy text-gold' 
-                : 'border-navy/30 text-transparent'
-            }`}>
-              <CheckCircle2 size={12} className="fill-current" />
-            </div>
-            <div>
-              <h4 className="font-bold text-xs sm:text-sm uppercase tracking-wider text-navy mb-1 flex items-center gap-2">
-                {c.label}
-              </h4>
-              <p className="text-[11px] sm:text-xs text-gray-soft font-light leading-relaxed">{c.desc}</p>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      <div className="mt-8 border-t border-navy/10 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-        <p className="text-xs text-gray-soft italic font-light">This checker models primary DCMA baseline logics. Remote Schedulers builds 100% compliant premium deliverables.</p>
-        <a 
-          href="#contact"
-          className="text-xs font-bold uppercase text-navy border-b-[2px] border-gold hover:text-gold tracking-widest transition-colors py-1 inline-block"
-        >
-          Request Expert Forensic Logic Audit
-        </a>
-      </div>
-    </div>
-  );
-};
-
 const PlanningTools = ({ onOpenQuoteWithDetails }: { onOpenQuoteWithDetails: (type: string, budget: string, speed: string) => void }) => {
-  const [activeTab, setActiveTab] = useState<'estimator' | 'audit'>('estimator');
-
   return (
     <section className="py-20 sm:py-24 px-4 sm:px-6 bg-white-off overflow-hidden border-t border-gold/10">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12 sm:mb-16">
           <span className="text-[10px] font-bold tracking-[0.4em] text-gold uppercase mb-4 block">Interactive Builder Tools</span>
           <h2 className="font-condensed text-3xl xs:text-4xl sm:text-5xl md:text-7xl font-extrabold text-navy uppercase leading-[0.9] sm:leading-[0.8] tracking-tight">Contractor<br />Planner Suite</h2>
-          
-          <div className="flex justify-center mt-8 sm:mt-12 gap-3">
-            <button
-              onClick={() => setActiveTab('estimator')}
-              className={`py-3.5 px-6 sm:px-10 text-[11px] font-extrabold uppercase tracking-widest transition-all ${
-                activeTab === 'estimator'
-                  ? 'bg-navy text-gold shadow-lg shadow-navy/10 border-b-2 border-gold'
-                  : 'bg-navy/5 text-navy/60 hover:bg-navy/10'
-              }`}
-            >
-              Price Estimator (-30% applied)
-            </button>
-            <button
-              onClick={() => setActiveTab('audit')}
-              className={`py-3.5 px-6 sm:px-10 text-[11px] font-extrabold uppercase tracking-widest transition-all ${
-                activeTab === 'audit'
-                  ? 'bg-navy text-gold shadow-lg shadow-navy/10 border-b-2 border-gold'
-                  : 'bg-navy/5 text-navy/60 hover:bg-navy/10'
-              }`}
-            >
-              DCMA Schedule Quality Checker
-            </button>
-          </div>
         </div>
 
-        <motion.div
-          key={activeTab}
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4 }}
-        >
-          {activeTab === 'estimator' ? (
-            <P6Estimator onOpenQuoteWithDetails={onOpenQuoteWithDetails} />
-          ) : (
-            <DCMAAuditChecklist />
-          )}
-        </motion.div>
+        <P6Estimator onOpenQuoteWithDetails={onOpenQuoteWithDetails} />
       </div>
     </section>
   );
