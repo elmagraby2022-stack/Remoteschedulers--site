@@ -110,7 +110,12 @@ async function startServer() {
 
       // Email Setup
       const companyEmail = "info@remoteschedulers.com";
-      const subject = isAuditRequest ? "New Free Audit Request From Website" : "New Quote Request From Website";
+      const isDiscountClaimed = !!(req.body.isDiscountClaimed || (submissionMessage && (submissionMessage.includes("30%") || submissionMessage.toLowerCase().includes("discount"))));
+      
+      let subject = isAuditRequest ? "New Free Audit Request From Website" : "New Quote Request From Website";
+      if (isDiscountClaimed) {
+        subject = `🚨 30% DISCOUNT CLAIMED: New Quote Request from ${submissionName}`;
+      }
 
       // Styled internal notification email
       const internalHtml = `
@@ -121,6 +126,13 @@ async function startServer() {
               <p style="margin: 5px 0 0 0; font-size: 12px; color: #8F9BB3; text-transform: uppercase; letter-spacing: 1px;">Internal Quote & Audit Notification</p>
             </div>
             <div style="padding: 30px; line-height: 1.6;">
+              ${isDiscountClaimed ? `
+              <div style="background-color: #5C450B; border-left: 6px solid #C9A84C; padding: 15px; margin-bottom: 25px; border-radius: 2px;">
+                <p style="margin: 0; font-weight: bold; color: #EDEAE2; font-size: 14px; text-transform: uppercase; letter-spacing: 1px;">🎁 30% FIRST-TIME DISCOUNT CLIENT</p>
+                <p style="margin: 5px 0 0 0; color: #EDEAE2; font-size: 12px; opacity: 0.9;">This client claimed the 30% Off Proposal Deal on the website! Please deliver their fixed-price schedule proposal with the promised 30% discount.</p>
+              </div>
+              ` : ''}
+              
               <h2 style="color: #C9A84C; margin-top: 0; border-bottom: 2px solid #C9A84C; padding-bottom: 8px; font-size: 18px;">Submission Details</h2>
               <table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
                 <tr>
@@ -146,6 +158,12 @@ async function startServer() {
                 <tr>
                   <td style="padding: 8px 0; font-weight: bold; color: #8F9BB3;">Project Size/Budget:</td>
                   <td style="padding: 8px 0; color: #EDEAE2;">${submissionSize}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 8px 0; font-weight: bold; color: #8F9BB3;">30% Offer Claimed:</td>
+                  <td style="padding: 8px 0; color: ${isDiscountClaimed ? '#4CAF50' : '#8F9BB3'}; font-weight: ${isDiscountClaimed ? 'bold' : 'normal'};">
+                    ${isDiscountClaimed ? "YES (30% Discount Code Applied)" : "No"}
+                  </td>
                 </tr>
                 <tr>
                   <td style="padding: 8px 0; font-weight: bold; color: #8F9BB3; vertical-align: top;">Key Message:</td>
@@ -181,7 +199,7 @@ async function startServer() {
                 </ol>
               </div>
 
-              <p style="font-size: 13px; color: #8F9BB3;">If you have any instant additions or need urgent assistance, don't hesitate to reply directly to this email or call our operational team at <strong>732-716-2718</strong>.</p>
+              <p style="font-size: 13px; color: #8F9BB3;">If you have any instant additions or need urgent assistance, don't hesitate to reply directly to this email.</p>
               
               <p style="margin-top: 30px; font-size: 14px; font-weight: bold; color: #C9A84C;">Warm regards,<br><span style="color: #EDEAE2; font-size: 12px; font-weight: normal; color: #8F9BB3;">Planning & Scheduling Team<br>Remote Schedulers Planning Group</span></p>
             </div>

@@ -75,13 +75,6 @@ const Header = ({
             <a href="mailto:info@remoteschedulers.com" className="hover:opacity-70 transition-all flex items-center gap-2">
               <Mail size={12} className="shrink-0" /> <span className="hidden sm:inline">info@remoteschedulers.com</span><span className="sm:hidden">Email</span>
             </a>
-            <span className="flex items-center gap-2 border-l border-navy/10 pl-4 md:pl-8">
-              <Phone size={12} className="shrink-0" /> 
-              <a href="tel:7327162718" className="hover:opacity-70 transition-all flex items-center gap-1">
-                <span className="hidden sm:inline">732-716-2718</span>
-                <span className="sm:hidden">Call</span>
-              </a>
-            </span>
           </div>
           
           <div className="order-1 md:order-2">
@@ -232,9 +225,6 @@ const Header = ({
                       <div className="flex flex-col items-center space-y-2.5">
                         <a href="mailto:info@remoteschedulers.com" className="text-white-off/60 text-xs xs:text-sm font-medium flex items-center gap-2.5 hover:text-gold transition-colors">
                           <Mail size={14} className="text-gold" /> info@remoteschedulers.com
-                        </a>
-                        <a href="tel:7327162718" className="text-white-off/60 text-xs xs:text-sm font-medium flex items-center gap-2.5 hover:text-gold transition-colors">
-                          <Phone size={14} className="text-gold" /> 732-716-2718
                         </a>
                       </div>
                     </div>
@@ -702,9 +692,6 @@ const Footer = () => {
               <a href="mailto:info@remoteschedulers.com" className="flex items-center gap-3 hover:text-gold transition-colors duration-300 break-all">
                 <Mail size={14} className="text-gold/50 shrink-0" /> info@remoteschedulers.com
               </a>
-              <a href="tel:7327162718" className="flex items-center gap-3 hover:text-gold transition-colors duration-300 break-all">
-                <Phone size={14} className="text-gold/50 shrink-0" /> 732-716-2718
-              </a>
               <p className="text-[9px] opacity-40 font-medium italic mt-4 tracking-normal normal-case">Operational Support available Mon-Fri, 9AM - 6PM</p>
             </div>
           </div>
@@ -769,7 +756,7 @@ const QuoteModal = ({
 }: { 
   isOpen: boolean; 
   onClose: () => void;
-  prefilledData?: { projectType?: string; challenges?: string; projectSize?: string } | null;
+  prefilledData?: { projectType?: string; challenges?: string; projectSize?: string; isDiscountClaimed?: boolean } | null;
 }) => {
   const [formData, setFormData] = useState({
     name: '',
@@ -824,6 +811,7 @@ const QuoteModal = ({
           projectType: formData.projectType,
           projectSize: formData.projectSize,
           challenges: formData.challenges,
+          isDiscountClaimed: !!prefilledData?.isDiscountClaimed,
         }),
       });
       
@@ -886,8 +874,12 @@ const QuoteModal = ({
             ) : (
               <form onSubmit={handleSubmit}>
                 <div className="mb-8">
-                  <span className="text-[10px] font-bold tracking-[0.4em] text-gold uppercase mb-3 block">Strategic Inquiry</span>
-                  <h3 className="font-condensed text-3xl sm:text-4xl md:text-5xl font-extrabold text-navy uppercase leading-none">Get a Quote</h3>
+                  <span className="text-[10px] font-bold tracking-[0.4em] text-gold uppercase mb-3 block">
+                    {prefilledData?.isDiscountClaimed ? "Special Offer Claimed" : "Strategic Inquiry"}
+                  </span>
+                  <h3 className="font-condensed text-3xl sm:text-4xl md:text-5xl font-extrabold text-navy uppercase leading-none">
+                    {prefilledData?.isDiscountClaimed ? "Claim Your 30% Off" : "Get a Quote"}
+                  </h3>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-5">
@@ -980,7 +972,7 @@ const QuoteModal = ({
                       <div className="w-5 h-5 border-2 border-gold border-t-transparent rounded-full animate-spin"></div>
                     ) : (
                       <>
-                        <span>Generate Professional Brief</span>
+                        <span>{prefilledData?.isDiscountClaimed ? "Claim 30% Off & Submit" : "Generate Professional Brief"}</span>
                         <ChevronRight size={16} />
                       </>
                     )}
@@ -1106,10 +1098,10 @@ const P6Estimator = ({ onOpenQuoteWithDetails }: { onOpenQuoteWithDetails: (type
           <div className="text-center md:text-left flex-1">
             <span className="text-[9px] font-bold tracking-[0.3em] text-gold uppercase block mb-1">Custom Scheduling Scope</span>
             <div className="text-xl sm:text-2xl font-condensed font-extrabold text-white-off uppercase leading-tight mt-2">
-              Please reach out by email or phone to discuss further
+              Please reach out by email to discuss further
             </div>
             <p className="text-[11px] text-white-off/50 mt-3 font-sans">
-              For projects exceeding $20M, custom baseline constraints and compliance criteria apply. Call <a href="tel:7327162718" className="text-gold font-bold hover:underline">732-716-2718</a> or email <a href="mailto:info@remoteschedulers.com" className="text-gold font-bold hover:underline">info@remoteschedulers.com</a> to finalize details.
+              For projects exceeding $20M, custom baseline constraints and compliance criteria apply. Email <a href="mailto:info@remoteschedulers.com" className="text-gold font-bold hover:underline">info@remoteschedulers.com</a> to finalize details.
             </p>
           </div>
         ) : (
@@ -1153,13 +1145,14 @@ const PlanningTools = ({ onOpenQuoteWithDetails }: { onOpenQuoteWithDetails: (ty
 export default function App() {
   const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [prefilledData, setPrefilledData] = useState<{ projectType?: string; challenges?: string; projectSize?: string } | null>(null);
+  const [prefilledData, setPrefilledData] = useState<{ projectType?: string; challenges?: string; projectSize?: string; isDiscountClaimed?: boolean } | null>(null);
 
   const handleOpenQuoteWithDetails = (type: string, budget: string, speed: string) => {
     setPrefilledData({
       projectType: type,
       projectSize: budget,
-      challenges: `Priority setup: ${speed}. Please provide a 30% discounted estimate of professional scheduling services for this project.`
+      challenges: `Priority setup: ${speed}. Please provide a 30% discounted estimate of professional scheduling services for this project.`,
+      isDiscountClaimed: true
     });
     setIsQuoteModalOpen(true);
   };

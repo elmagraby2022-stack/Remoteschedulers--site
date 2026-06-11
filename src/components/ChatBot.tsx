@@ -45,7 +45,7 @@ export const ChatBot = ({ isHidden = false }: ChatBotProps) => {
     } else if (lowercaseInput.includes('sample') || lowercaseInput.includes('example')) {
       priorityResponse = 'Please let us know what type of scheduling sample you are looking for, and our team will send it within approximately 2 business days.';
     } else if (lowercaseInput.includes('call') || lowercaseInput.includes('contact') || lowercaseInput.includes('consultation') || lowercaseInput.includes('phone') || lowercaseInput.includes('email')) {
-      priorityResponse = 'You can reach our scheduling team directly via email at info@remoteschedulers.com or call us at 732-716-2718 to schedule a consultation or request a quote.';
+      priorityResponse = 'You can reach our scheduling team directly via email at info@remoteschedulers.com to schedule a consultation or request a quote.';
     } else if (lowercaseInput.includes('service') || lowercaseInput.includes('what do you do') || lowercaseInput.includes('capabilities')) {
       priorityResponse = 'Remote Schedulers provides expert project controls, including Primavera P6 CPM baseline development, monthly progress updates, cost/resource loading, and forensic delay analysis. We specialize in submission-ready schedules for commercial and EPC projects.';
     }
